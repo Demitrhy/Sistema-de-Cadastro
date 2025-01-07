@@ -1,0 +1,6 @@
+@LOG_RT_DISTRIBUICAO_CORE_HostAddress = http://localhost:5068
+
+GET {{LOG_RT_DISTRIBUICAO_CORE_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
