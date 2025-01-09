@@ -7,6 +7,7 @@
         public string? Descricao { get; set; }
         public string? Categoria { get; set; }
         public DateTime Data_Hora_Cadastro { get; set; }
+        public string? Situacao { get; set; }
 
     }
 }

@@ -7,6 +7,7 @@ namespace LOG_RT_DISTRIBUICAO_CORE {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<ProdutoDto> Produtos { get; set; }
+
     }
 
 }

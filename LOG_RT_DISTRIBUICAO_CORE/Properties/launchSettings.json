@@ -8,9 +8,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "SERVER": "localhost\\SQLEXPRESS",
-        "DATABASE": "Cosmos_v14b",
-        "USER": "SEU_USUARIO",
-        "PASSWORD": "SUA_SENHA"
+        "DATABASE": "Cosmos_v14b"
+
       },
       "dotnetRunMessages": true
     },
