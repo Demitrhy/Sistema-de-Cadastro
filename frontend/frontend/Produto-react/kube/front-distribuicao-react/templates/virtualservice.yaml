@@ -1,0 +1,25 @@
+{{- if .Values.virtualservice.enabled -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "front-pedido-direto-react.name" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "front-pedido-direto-react.labels" . | nindent 4 }}
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - default/api-gateway
+  http:
+  - match:
+    - uri:
+        prefix: {{ print .Values.virtualservice.api.url | quote }}
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: "{{ include "front-pedido-direto-react.name" . }}.{{ .Release.Namespace }}.svc.cluster.local"
+        port:
+          number: {{ .Values.service.port }}
+{{- end }}

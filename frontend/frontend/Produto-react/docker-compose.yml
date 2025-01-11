@@ -1,0 +1,13 @@
+version: '3'
+services:
+  central-pedidos-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        env: prd
+    # HASH_DATETIME=`exec date +%d%m%Y%H%M%S` docker-compose up --build -d
+    container_name: central-pedidos-${HASH_DATETIME}
+    ports:
+      - "80:80"
+

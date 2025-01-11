@@ -1,0 +1,112 @@
+#Numero de Pods
+replicaCount: 2
+terminationGracePeriodSeconds: 30
+version: v1
+
+#Definicao da Imagem
+image:
+#Produção=prod/kubernetestemplate
+#Homologacao=homo/kubernetestemplate
+  registry: pcr.pmenos.com.br
+  repository: homo/front-pedido-direto-react
+#Versionamento da Imagem dia.mes.ano.revisao, ex: 18.03.2020.1
+  tag: 07.04.2020.1
+#Politica de Pull da Imagem
+  pullPolicy: IfNotPresent
+  debug: false
+
+
+#Definição de url para a api
+
+virtualservice:
+   enabled: true
+   api:
+     url: /front-pedido-direto-react
+
+configmap:
+  enabled: false
+
+#Definição do Secret
+secret:
+ enabled: false
+# name: mssqlserver-user-pass
+
+#Strategia de Update para deploy do pod
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 25%
+    maxUnavailable: 25%
+
+#HealthCheck do Pod enquanto Roda
+livenessProbe:
+  enabled: false
+  httpGet:
+    path: /health
+    port: http
+    scheme: HTTP 
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+#Health check para colocar o pod pronto para uso
+readinessProbe:
+  enabled: false
+  httpGet:
+    path: /health
+    port: http
+    scheme: HTTP
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+#Segurança do Pod
+#podSecurityContext:
+#   fsGroup: 20000
+
+#securityContext: 
+#   allowPrivilegeEscalation: false
+#   capabilities:
+#     drop: ["all"]
+#   runAsGroup: 20000
+#   runAsNonRoot: true
+#   runAsUser: 20000
+
+#Tipo de Serviço e Porta 
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+
+#Definindo Requests e Limits para a Aplicação
+resources: 
+  limits:
+     cpu: 400m
+     memory: 400Mi
+  requests:
+    cpu: 10m
+    memory: 50Mi
+
+#Configuracao de AutoScaling
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 80
+  #targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+#imagePullSecrets: []
+# - registrySecretName
+#nameOverride: ""
+#fullnameOverride: ""
+#Seguranca do Pod no Kubernetes

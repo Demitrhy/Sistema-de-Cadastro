@@ -1,0 +1,96 @@
+{
+  "name": "front-pedido-direto-react",
+  "version": "1.7.2",
+  "private": true,
+  "dependencies": {
+    "@ant-design/icons": "^4.0.5",
+    "@boldreports/react-reporting-components": "^3.3.27",
+    "@types/react-highlight-words": "^0.16.1",
+    "@unform/core": "^2.1.6",
+    "@unform/web": "^2.1.6",
+    "antd": "^4.1.0",
+    "apexcharts": "^3.27.1",
+    "axios": "^0.19.2",
+    "chart.js": "^2.9.4",
+    "echarts": "^4.7.0",
+    "env-cmd": "^10.1.0",
+    "file-saver": "^2.0.5",
+    "immer": "^6.0.3",
+    "jwt-decode": "^2.2.0",
+    "moment": "^2.29.1",
+    "nprogress": "^0.2.0",
+    "peekdata-datagateway-api-sdk": "^3.0.0",
+    "react": "^16.12.0",
+    "react-apexcharts": "^1.3.9",
+    "react-chartjs-2": "^2.11.1",
+    "react-countup": "^4.3.3",
+    "react-datepicker": "^3.6.0",
+    "react-dom": "^16.12.0",
+    "react-export-excel": "^0.5.3",
+    "react-highlight-words": "^0.17.0",
+    "react-icons": "^3.11.0",
+    "react-intl": "^5.4.6",
+    "react-redux": "^7.1.3",
+    "react-report-builder": "^3.0.8",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "^3.4.0",
+    "read-excel-file": "^5.0.0",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-saga": "^1.1.3",
+    "styled-components": "^5.0.0",
+    "typesafe-actions": "^5.1.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.1.2",
+    "@types/history": "^4.7.3",
+    "@types/jest": "^24.0.0",
+    "@types/jwt-decode": "^2.2.1",
+    "@types/node": "^12.0.0",
+    "@types/nprogress": "^0.2.0",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "@types/react-redux": "^7.1.6",
+    "@types/react-router": "^5.1.4",
+    "@types/react-router-dom": "^5.1.3",
+    "@types/styled-components": "^4.4.2",
+    "prettier": "2.0.5",
+    "typescript": "~3.7.2"
+  },
+  "scripts": {
+    "start": "react-scripts --openssl-legacy-provider start",
+    "start-dev": "env-cmd -e dev react-scripts start",
+    "start-stg": "env-cmd -e stg react-scripts start",
+    "start-prod": "env-cmd -e prod react-scripts start",
+    "build": "react-scripts --openssl-legacy-provider build",
+    "build:dev": "env-cmd -e dev react-scripts build",
+    "build:stg": "env-cmd -e stg react-scripts build",
+    "build:prod": "env-cmd -e prod react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "docker": "HASH_DATETIME=`exec date +%d%m%Y%H%M%S` docker-compose up --build -d"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=10.16.3",
+    "npm": ">=6.9.0"
+  }
+}

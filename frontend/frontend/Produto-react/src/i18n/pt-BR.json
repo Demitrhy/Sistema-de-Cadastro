@@ -1,0 +1,12 @@
+{ 
+    "searchbar.placeholder": "Pesquisar",
+    "searchbar.tooltip.preffix": "Selecionar Filtros",
+    "searchbar.tooltip.suffix": "Remover FIltros",
+    "searchbar.message.clearFilter": "Os filtros foram removidos.", 
+
+    "list.emptyData": "Nenhuma informação foi encontrada.", 
+    "list.footerInfo": "Lista",
+    
+    "select.selectAll": "SELECIONAR TODOS" 
+
+}
