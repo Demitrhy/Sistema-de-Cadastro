@@ -1,24 +1,17 @@
 {
   "profiles": {
-    "http": {
+    "LOG_RT_DISTRIBUICAO_CORE": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7014;http://localhost:5068",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "SERVER": "localhost\\SQLEXPRESS",
+        "DATABASE": "Cosmos_v14b"
+
       },
-      "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5068"
-    },
-    "https": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:7014;http://localhost:5068"
+      "dotnetRunMessages": true
     },
     "IIS Express": {
       "commandName": "IISExpress",
