@@ -134,7 +134,7 @@ const CadastroPlanilha: React.FC = () => {
                                 fontWeight: 'bold'
                             }}
                         >
-                            {loading ? 'Importando...' : '▶ Importar Produto'}
+                            {loading ? 'Importando...' : '▶ Importar Cadastro'}
                         </button>
 
                         <button onClick={limparPlanilha}
@@ -160,7 +160,7 @@ const CadastroPlanilha: React.FC = () => {
                             <tr style={{ backgroundColor: '#0d6efd', color: '#ffffff' }}>
                                 <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Produto</th>
                                 <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Valor</th>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Categoria</th>
+                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Tipo</th>
                                 <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Descrição</th>
                             </tr>
                         </thead>
@@ -170,7 +170,7 @@ const CadastroPlanilha: React.FC = () => {
                                 <tr key={idx}>
                                     <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.produto}</td>
                                     <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.valor}</td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.categoria}</td>
+                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.tipo}</td>
                                     <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.descricao}</td>
                                 </tr>
                             ))}
