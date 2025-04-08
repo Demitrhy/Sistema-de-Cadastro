@@ -1,5 +1,6 @@
 export interface Produto {
-    produto: string;
+    produto: number;
+    valor: number;
     descricao: string;
     categoria: string;
   }
