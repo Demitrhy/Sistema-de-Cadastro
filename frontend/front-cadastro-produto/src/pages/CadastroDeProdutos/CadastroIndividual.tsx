@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Produto } from '../../interface/Produto';
 import { Importar } from '../../api/Api';
 
@@ -7,7 +7,6 @@ const CadastroIndividual: React.FC = () => {
     const [planilha, setPlanilha] = useState<Array<Produto>>([]);
     const [produto, setProduto] = useState(0);
     const [custo, setCusto] = useState(0);
-    const [lucro, setLucro] = useState(0);
     const [percentualLucro, setPercentualLucro] = useState(0);
     const [precoVenda, setPrecoVenda] = useState(0);
     const [comissao, setComissao] = useState(0);
@@ -23,7 +22,6 @@ const CadastroIndividual: React.FC = () => {
     const limparCampos = () => {
         setProduto(0);
         setCusto(0);
-        setLucro(0);
         setPrecoVenda(0);
         setPercentualLucro(0);
         setComissao(0);
@@ -39,12 +37,20 @@ const CadastroIndividual: React.FC = () => {
         setPlanilha([]);
     }
 
+    useEffect(() => {
+        const preco = custo + (custo * percentualLucro / 100);
+        const comissaoReais = preco * (comissao / 100);
+        const liquidoCalc = preco - comissaoReais;
+        setPrecoVenda(preco);
+        setLiquido(liquidoCalc);
+      }, [custo, percentualLucro, comissao]);
+      
+
     const adicionarProduto = () => {
         if (produto > 0 && custo > 0 && tipo.trim() && descricao.trim()) {
             const novoItem: Produto = {
                 produto,
                 custo,
-                lucro,
                 percentualLucro,
                 comissao,
                 precoVenda,
@@ -268,30 +274,12 @@ const CadastroIndividual: React.FC = () => {
                             }}
                         />
                     </div>
-
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label style={{ fontWeight: 'bold', marginBottom: '5px' }}>Quero Lucrar (R$)</label>
-                        <input
-                            type="number"
-                            value={lucro}
-                            onChange={(e) => setLucro(parseInt(e.target.value))}
-                            min={1}
-                            style={{
-                                padding: '5px',
-                                fontSize: '16px',
-                                borderRadius: '4px',
-                                appearance: 'textfield', // Firefox
-                                border: '1px solid #ccc',
-                                width: '200px',
-                            }}
-                        />
-                    </div>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <label style={{ fontWeight: 'bold', marginBottom: '5px' }}>Perc. de Lucro (%)</label>
                         <input
                             type="number"
-                            value={lucro}
-                            onChange={(e) => setLucro(parseInt(e.target.value))}
+                            value={percentualLucro}
+                            onChange={(e) => setPercentualLucro(parseInt(e.target.value))}
                             min={1}
                             style={{
                                 padding: '5px',
@@ -380,7 +368,6 @@ const CadastroIndividual: React.FC = () => {
                                 marca.trim() === '' ||
                                 grupo.trim() === '' ||
                                 unidade.trim() === '' ||
-                                lucro <= 0 ||
                                 percentualLucro <= 0 ||
                                 comissao <= 0 ||
                                 liquido <= 0 ||
@@ -395,7 +382,6 @@ const CadastroIndividual: React.FC = () => {
                                         marca.trim() === '' ||
                                         grupo.trim() === '' ||
                                         unidade.trim() === '' ||
-                                        lucro <= 0 ||
                                         percentualLucro <= 0 ||
                                         comissao <= 0 ||
                                         liquido <= 0 ||
@@ -410,7 +396,6 @@ const CadastroIndividual: React.FC = () => {
                                         marca.trim() === '' ||
                                         grupo.trim() === '' ||
                                         unidade.trim() === '' ||
-                                        lucro <= 0 ||
                                         percentualLucro <= 0 ||
                                         comissao <= 0 ||
                                         liquido <= 0 ||
@@ -474,14 +459,12 @@ const CadastroIndividual: React.FC = () => {
                                 <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Marca</th>
                                 <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Unidade Medida</th>
                                 <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Custo</th>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Lucro</th>
                                 <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Perc. de Lucro %</th>
                                 <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Preço Venda R$</th>
                                 <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Comissão %</th>
                                 <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Liquido R$</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             {planilha.map((item, idx) => (
                                 <tr key={idx}>
@@ -492,11 +475,10 @@ const CadastroIndividual: React.FC = () => {
                                     <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.marca}</td>
                                     <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.unidadeMedida}</td>
                                     <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.custo}</td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.lucro}</td>
                                     <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.percentualLucro}</td>
+                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.precoVenda}</td>
                                     <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.comissao}</td>
                                     <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.liquido}</td>
-
                                 </tr>
                             ))}
                         </tbody>

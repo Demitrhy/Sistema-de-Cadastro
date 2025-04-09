@@ -4,6 +4,7 @@ using LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio.Interface;
 using LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio.Script;
 using System.Data.SqlClient;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio {
     public class ProdutoRepositorio : IProdutoRepositorio {
@@ -45,17 +46,28 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio {
             }
         }
 
-        public async Task InserirProdutoNovo(int produto, int digito, string? descricao, string? caregoria) {
+        public async Task InserirProdutoNovo(List<ProdutoDto> produto, int digito) {
+
             using (var connection = new SqlConnection(_sqlConnection.ConnectionString)) {
                 connection.Open();
 
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("Produto", produto);
-                parameters.Add("Digito", digito);
-                parameters.Add("Descricao", descricao);
-                parameters.Add("Categoria", caregoria);
+                foreach (var item in produto) {
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("PRODUTO", item.Produto);
+                    parameters.Add("DIGITO", digito);
+                    parameters.Add("DESCRICAO", item.Nome);
+                    parameters.Add("TIPO", item.Tipo);
+                    parameters.Add("GRUPO", item.Grupo);
+                    parameters.Add("MARCA", item.Marca);
+                    parameters.Add("UNIDADE_MEDIDA", item.UnidadeMedida);
+                    parameters.Add("CUSTO", item.Custo);
+                    parameters.Add("PERC_LUCRO", item.PercLucro);
+                    parameters.Add("PRECO_VENDA", item.PrecoVenda);
+                    parameters.Add("COMISSAO", item.Comissao);
+                    parameters.Add("LIQUIDO", item.Liquido);
 
-                await connection.ExecuteAsync(ProdutoScript.InserirNovoProduto, parameters);
+                    await connection.ExecuteAsync(ProdutoScript.InserirNovoProduto, parameters);
+                }
 
             }
         }
@@ -68,7 +80,7 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio {
                 parameters.Add("Produto", produto);
                 parameters.Add("Digito", digito);
                 parameters.Add("Situacao", situacao);
-               
+
                 await connection.ExecuteAsync(ProdutoScript.AlterarSituacaoProduto, parameters);
 
             }

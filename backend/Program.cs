@@ -21,11 +21,11 @@ public class Program {
 
         string connectionString = $"Server={server};Database={database};Trusted_Connection=True;";
 
+        // Serviços
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(connectionString));
 
         builder.Services.AddScoped<SqlConnection>(_ => new SqlConnection(connectionString));
-
         builder.Services.AddScoped<IProdutoRepositorio, ProdutoRepositorio>();
         builder.Services.AddScoped<IProdutoService, ProdutoService>();
 
@@ -33,16 +33,30 @@ public class Program {
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        // CORS
+        builder.Services.AddCors(options => {
+            options.AddPolicy("PermitirReact", policy => {
+                policy.WithOrigins("http://localhost:3000", "https://localhost:3000") // cobre os dois casos
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
+        });
+
         var app = builder.Build();
 
-    
+        // Middlewares
         if (app.Environment.IsDevelopment()) {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
 
         app.UseHttpsRedirection();
+
+        // ATENÇÃO: UseCors deve vir antes do UseAuthorization e MapControllers
+        app.UseCors("PermitirReact");
+
         app.UseAuthorization();
+
         app.MapControllers();
 
         app.Run();

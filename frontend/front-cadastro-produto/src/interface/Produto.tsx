@@ -6,7 +6,6 @@ export interface Produto {
     tipo: string;
     unidadeMedida:string;
     grupo:string;
-    lucro:number;
     percentualLucro:number;
     precoVenda:number;
     comissao:number;

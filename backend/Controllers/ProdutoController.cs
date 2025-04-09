@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LOG_RT_DISTRIBUICAO_CORE.Controllers
 {
     [ApiController]
-    [Route("Produtos")]
+    [Route("[controller]")]
     public class ProdutoController : ControllerBase {
 
         private readonly IProdutoService _produto; 
@@ -22,11 +22,11 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Controllers
             return produto;
         }
 
-        [HttpPost("InserirNovoProduto")]
-        public async Task InserirNovoProduto(int produto, string? descricao, string? categoria)
+        [HttpPost("Importar")]
+        public async Task InserirNovoProduto([FromBody] List<ProdutoDto> produto)
         {
             try {
-                await _produto.AdicionarNovoProduto(produto,descricao,categoria);
+                await _produto.AdicionarNovoProduto(produto);
             }
             catch (Exception ex )
             {

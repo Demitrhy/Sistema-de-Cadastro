@@ -12,7 +12,7 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Service {
         private readonly IProdutoRepositorio _produtoRepositorio;
         private readonly Random _random;
 
-    
+
         public ProdutoService(IProdutoRepositorio produtoRepositorio) {
             _produtoRepositorio = produtoRepositorio;
             _random = new Random();
@@ -23,24 +23,22 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Service {
             return buscar;
         }
 
-        public async Task AdicionarNovoProduto(int produto, string? descricao, string? categoria) {
+        public async Task AdicionarNovoProduto(List<ProdutoDto> produtos) {
             try {
 
                 int digitoAleatorio = _random.Next(1, 10);
-                var buscar = _produtoRepositorio.BuscarProduto(produto);
+                foreach (var produto in produtos) {
 
-                if (buscar == 0) {
+                    var buscar = _produtoRepositorio.BuscarProduto(produto.Produto);
 
-                    if (categoria == "M" || categoria == "NM" || categoria == "P") {
-                        await _produtoRepositorio.InserirProdutoNovo(produto, digitoAleatorio, descricao, categoria);
+                    if (buscar == 0) {
+
+                        await _produtoRepositorio.InserirProdutoNovo(produtos, digitoAleatorio);
+
                     }
-                    else throw new Exception($"Essa categoria '{categoria}' não é permitida. Apenas as categoria  'M' (Medicamento ), 'NM' (NÃO MEDICAMENTO) e 'P' (PERFUMARIA) são válidas.");
-
+                    else
+                        throw new Exception($"Esse produto {produto.Produto} já existe!");
                 }
-                else
-                    throw new Exception($"Esse produto {produto} já existe!");
-
-
             }
             catch (ArgumentException e) {
                 throw new ArgumentException("Algo deu errado ao adicionar novo produto");
