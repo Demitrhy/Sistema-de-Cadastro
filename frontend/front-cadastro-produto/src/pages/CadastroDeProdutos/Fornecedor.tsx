@@ -68,7 +68,7 @@ const CadastroPlanilha: React.FC = () => {
 
             }}
         >
-            <h2 style={{ color: '#333' }}>Cadastro de Produto</h2>
+            
 
             {/* Bloco único com tudo junto */}
             <div
@@ -166,14 +166,14 @@ const CadastroPlanilha: React.FC = () => {
                         </thead>
 
                         <tbody>
-                            {planilha.map((item, idx) => (
+                            {/* {planilha.map((item, idx) => (
                                 <tr key={idx}>
                                     <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.produto}</td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.valor}</td>
+                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.custo}</td>
                                     <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.tipo}</td>
                                     <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.descricao}</td>
                                 </tr>
-                            ))}
+                            ))} */}
                         </tbody>
                     </table>
                 </div>

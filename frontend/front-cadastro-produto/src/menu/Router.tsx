@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import CadastroIndividual from '../pages/CadastroDeProdutos/CadastroIndividual';
-import CadastroPlanilha from '../pages/CadastroDeProdutos/CadastroPlanilha';
+import Fornecedor from '../pages/CadastroDeProdutos/Fornecedor';
 
 const Menu: React.FC = () => {
-  const [pagina, setPagina] = useState<'individual' | 'planilha'>('individual');
+  const [pagina, setPagina] = useState<'individual' | 'fornecedor'>('individual');
   const [menuAberto, setMenuAberto] = useState(false);
   const [submenuProdutoAberto, setSubmenuProdutoAberto] = useState(false);
 
@@ -11,8 +11,8 @@ const Menu: React.FC = () => {
     switch (pagina) {
       case 'individual':
         return <CadastroIndividual />;
-      case 'planilha':
-        return <CadastroPlanilha />;
+      case 'fornecedor':
+        return <Fornecedor />;
       default:
         return null;
     }
@@ -70,11 +70,11 @@ const Menu: React.FC = () => {
             <li
               style={{
                 cursor: 'pointer',
-                color: pagina === 'planilha' ? '#007bff' : '#333',
+                color: pagina === 'fornecedor' ? '#007bff' : '#333',
               }}
-              onClick={() => setPagina('planilha')}
+              onClick={() => setPagina('fornecedor')}
             >
-              Cadastro por Planilha
+              Fornecedor
             </li>
           </ul>
         )}
@@ -111,7 +111,7 @@ const Menu: React.FC = () => {
           </div>
           <div
             onClick={() => {
-              setPagina('planilha');
+              setPagina('fornecedor');
               setSubmenuProdutoAberto(false);
             }}
             style={{
@@ -125,7 +125,7 @@ const Menu: React.FC = () => {
               whiteSpace: 'nowrap',
             }}
           >
-            Cadastro por Planilha
+            Fornecedor
           </div>
         </div>
       )}

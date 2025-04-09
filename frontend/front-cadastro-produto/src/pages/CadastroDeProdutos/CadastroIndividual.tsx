@@ -6,7 +6,12 @@ import { Importar } from '../../api/Api';
 const CadastroIndividual: React.FC = () => {
     const [planilha, setPlanilha] = useState<Array<Produto>>([]);
     const [produto, setProduto] = useState(0);
-    const [valor, setValor] = useState(0);
+    const [custo, setCusto] = useState(0);
+    const [lucro, setLucro] = useState(0);
+    const [percentualLucro, setPercentualLucro] = useState(0);
+    const [precoVenda, setPrecoVenda] = useState(0);
+    const [comissao, setComissao] = useState(0);
+    const [liquido, setLiquido] = useState(0);
     const [unidade, setUnidade] = useState("");
     const [descricao, setDescricao] = useState("");
     const [marca, setMarca] = useState("");
@@ -17,7 +22,12 @@ const CadastroIndividual: React.FC = () => {
 
     const limparCampos = () => {
         setProduto(0);
-        setValor(0);
+        setCusto(0);
+        setLucro(0);
+        setPrecoVenda(0);
+        setPercentualLucro(0);
+        setComissao(0);
+        setLiquido(0);
         setTipo('');
         setDescricao('');
         setGrupo("");
@@ -30,10 +40,15 @@ const CadastroIndividual: React.FC = () => {
     }
 
     const adicionarProduto = () => {
-        if (produto > 0 && valor > 0 && tipo.trim() && descricao.trim()) {
+        if (produto > 0 && custo > 0 && tipo.trim() && descricao.trim()) {
             const novoItem: Produto = {
                 produto,
-                valor,
+                custo,
+                lucro,
+                percentualLucro,
+                comissao,
+                precoVenda,
+                liquido,
                 marca: marca.trim(),
                 tipo: tipo.trim(),
                 descricao: descricao.trim(),
@@ -68,7 +83,8 @@ const CadastroIndividual: React.FC = () => {
                 backgroundColor: '#f9f9f9',
                 minHeight: '100vh',
                 padding: '40px',
-                fontFamily: 'sans-serif'
+                fontFamily: 'sans-serif',
+               
             }}
         >
             <h2 style={{ color: '#333' }}>Cadastro de Produto</h2>
@@ -158,8 +174,8 @@ const CadastroIndividual: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Linha 2: Grupo | Marca | Valor */}
-                <div style={{ display: 'flex', gap: '20px' }}>
+                {/* Linha 2: Grupo | Marca | custo */}
+                <div style={{ display: 'flex', gap: '20px', marginBottom: '15px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Grupo</label>
                         <select
@@ -187,7 +203,7 @@ const CadastroIndividual: React.FC = () => {
                         </select>
                     </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column',marginLeft:'30px' }}>
                         <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Marca</label>
                         <input
                             type="text"
@@ -199,7 +215,7 @@ const CadastroIndividual: React.FC = () => {
                                 fontSize: '16px',
                                 borderRadius: '4px',
                                 border: '1px solid #ccc',
-                                width: '250px',
+                                width: '500px',
                             }}
                         />
                     </div>
@@ -233,13 +249,14 @@ const CadastroIndividual: React.FC = () => {
 
                     </div>
                 </div>
+
                 <div style={{ display: 'flex', gap: '30px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Valor</label>
+                        <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Custo</label>
                         <input
                             type="number"
-                            value={valor}
-                            onChange={(e) => setValor(parseFloat(e.target.value))}
+                            value={custo}
+                            onChange={(e) => setCusto(parseInt(e.target.value))}
                             min={1}
                             style={{
                                 padding: '5px',
@@ -247,12 +264,100 @@ const CadastroIndividual: React.FC = () => {
                                 borderRadius: '4px',
                                 appearance: 'textfield', // Firefox
                                 border: '1px solid #ccc',
-                                width: '250px',
+                                width: '180px',
                             }}
                         />
                     </div>
-                </div>
 
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <label style={{ fontWeight: 'bold', marginBottom: '5px' }}>Quero Lucrar (R$)</label>
+                        <input
+                            type="number"
+                            value={lucro}
+                            onChange={(e) => setLucro(parseInt(e.target.value))}
+                            min={1}
+                            style={{
+                                padding: '5px',
+                                fontSize: '16px',
+                                borderRadius: '4px',
+                                appearance: 'textfield', // Firefox
+                                border: '1px solid #ccc',
+                                width: '200px',
+                            }}
+                        />
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <label style={{ fontWeight: 'bold', marginBottom: '5px' }}>Perc. de Lucro (%)</label>
+                        <input
+                            type="number"
+                            value={lucro}
+                            onChange={(e) => setLucro(parseInt(e.target.value))}
+                            min={1}
+                            style={{
+                                padding: '5px',
+                                fontSize: '16px',
+                                borderRadius: '4px',
+                                appearance: 'textfield', // Firefox
+                                border: '1px solid #ccc',
+                                width: '180px',
+                            }}
+                        />
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <label style={{ fontWeight: 'bold', marginBottom: '5px' }}>Preço Venda (R$)</label>
+                        <input
+                            type="number"
+                            value={precoVenda}
+                            onChange={(e) => setPrecoVenda(parseInt(e.target.value))}
+                            min={1}
+                            style={{
+                                padding: '5px',
+                                fontSize: '16px',
+                                borderRadius: '4px',
+                                appearance: 'textfield', // Firefox
+                                border: '1px solid #ccc',
+                                width: '180px',
+                            }}
+                        />
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <label style={{ fontWeight: 'bold', marginBottom: '5px' }}>Comissão (%$)</label>
+                        <input
+                            type="number"
+                            value={comissao}
+                            onChange={(e) => setComissao(parseInt(e.target.value))}
+                            min={1}
+                            style={{
+                                padding: '5px',
+                                fontSize: '16px',
+                                borderRadius: '4px',
+                                appearance: 'textfield', // Firefox
+                                border: '1px solid #ccc',
+                                width: '150px',
+                            }}
+                        />
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <label style={{ fontWeight: 'bold', marginBottom: '5px' }}>Liquido (R$)</label>
+                        <input
+                            type="number"
+                            value={liquido}
+                            onChange={(e) => setLiquido(parseInt(e.target.value))}
+                            min={1}
+                            style={{
+                                padding: '5px',
+                                fontSize: '16px',
+                                borderRadius: '4px',
+                                appearance: 'textfield', // Firefox
+                                border: '1px solid #ccc',
+                                width: '200px',
+                            }}
+                        />
+                    </div>
+                   
+                </div>
 
                 <div style={{
                     border: '1px solid #dee2e6',
@@ -269,34 +374,46 @@ const CadastroIndividual: React.FC = () => {
                             onClick={adicionarProduto}
                             disabled={
                                 produto <= 0 ||
-                                valor <= 0 ||
+                                custo <= 0 ||
                                 tipo.trim() === '' ||
                                 descricao.trim() === '' ||
                                 marca.trim() === '' ||
                                 grupo.trim() === '' ||
                                 unidade.trim() === '' ||
+                                lucro <= 0 ||
+                                percentualLucro <= 0 ||
+                                comissao <= 0 ||
+                                liquido <= 0 ||
                                 loading
                             }
                             style={{
                                 opacity:
                                     produto <= 0 ||
-                                        valor <= 0 ||
+                                        custo <= 0 ||
                                         tipo.trim() === '' ||
                                         descricao.trim() === '' ||
                                         marca.trim() === '' ||
                                         grupo.trim() === '' ||
                                         unidade.trim() === '' ||
+                                        lucro <= 0 ||
+                                        percentualLucro <= 0 ||
+                                        comissao <= 0 ||
+                                        liquido <= 0 ||
                                         loading
                                         ? 0.5
                                         : 1,
                                 cursor:
                                     produto <= 0 ||
-                                        valor <= 0 ||
+                                        custo <= 0 ||
                                         tipo.trim() === '' ||
                                         descricao.trim() === '' ||
                                         marca.trim() === '' ||
                                         grupo.trim() === '' ||
                                         unidade.trim() === '' ||
+                                        lucro <= 0 ||
+                                        percentualLucro <= 0 ||
+                                        comissao <= 0 ||
+                                        liquido <= 0 ||
                                         loading
                                         ? 'not-allowed'
                                         : 'pointer',
@@ -344,7 +461,6 @@ const CadastroIndividual: React.FC = () => {
                             🗑️ Limpar
                         </button>
                     </div>
-
                     {mensagem && <p>{mensagem}</p>}
 
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -357,11 +473,14 @@ const CadastroIndividual: React.FC = () => {
                                 <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Grupo</th>
                                 <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Marca</th>
                                 <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Unidade Medida</th>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Valor</th>
-
+                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Custo</th>
+                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Lucro</th>
+                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Perc. de Lucro %</th>
+                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Preço Venda R$</th>
+                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Comissão %</th>
+                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Liquido R$</th>
                             </tr>
                         </thead>
-
 
                         <tbody>
                             {planilha.map((item, idx) => (
@@ -372,7 +491,11 @@ const CadastroIndividual: React.FC = () => {
                                     <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.grupo}</td>
                                     <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.marca}</td>
                                     <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.unidadeMedida}</td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.valor}</td>
+                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.custo}</td>
+                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.lucro}</td>
+                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.percentualLucro}</td>
+                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.comissao}</td>
+                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.liquido}</td>
 
                                 </tr>
                             ))}
