@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace LOG_RT_DISTRIBUICAO_CORE.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class ProdutoController : ControllerBase {
+    [Route("api/[controller]")]
+    public class ProdutoController : ControllerBase
+    {
 
         private readonly IProdutoService _produto; 
 
