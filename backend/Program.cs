@@ -3,7 +3,6 @@ using System;
 using System.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using LOG_RT_DISTRIBUICAO_CORE.Interface.Service;
-using LOG_RT_DISTRIBUICAO_CORE.Interface;
 using LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio.Interface;
 using LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio;
 

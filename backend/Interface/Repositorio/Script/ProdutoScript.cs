@@ -1,27 +1,63 @@
-﻿namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio.Script {
-    public class ProdutoScript {
+﻿namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio.Script
+{
+    public class ProdutoScript
+    {
 
         public static string BuscarProduto => @"
-         SELECT 
-            PRODUTO             as Produto
-            ,DIGITO				as Digito
-            ,DESCRICAO			as Descricao
-            ,DATA_HORA_CADASTRO	as Data_Hora_Cadastro
-            ,SITUACAO			as Situacao
-            ,TIPO				as Tipo
-            ,GRUPO				as Grupo
-            ,MARCA				as Marca
-            ,UNIDADE_MEDIDA		as UnidadeMedida
-            ,CUSTO				as Custo
-            ,PERC_LUCRO			as PercLucro
-            ,PRECO_VENDA		as PrecoVenda
-            ,COMISSAO			as Comissao
-            ,LIQUIDO			as Liquido 
-              FROM PRODUTO_MESTRE
-              WHERE PRODUTO = @Produto
- 
- 
+         SELECT
+            PM_CD_PRODUTO as Produto
+            ,PM_CD_DIGITO	as Digito
+            ,PM_TX_DESCRICAO as Nome
+            ,PM_DT_DATA_HORA_CADASTRO	as Data_Hora_Cadastro
+            ,PM_ST_SITUACAO	as Situacao
+            ,PM_TX_MARCA	as Marca
+            ,PM_RS_CUSTO	as Custo
+            ,PM_RS_PERC_LUCRO	as PercLucro
+            ,PM_RS_PRECO_VENDA	as PrecoVenda
+            ,PM_RS_COMISSAO	as Comissao
+            ,PM_RS_LIQUIDO	as Liquido 
+            ,ID_TIPO as IdTipo
+            ,ID_GRUPO	 as IdGrupo
+            ,ID_UNIDADE_MEDIDA as IdUnidade
+         FROM PRODUTO_MESTRE WHERE PM_CD_PRODUTO = @Produto
           ";
+        public static string BuscarProdutos => @"
+           SELECT
+               PM_CD_PRODUTO as Produto
+               ,PM_CD_DIGITO	as Digito
+               ,PM_TX_DESCRICAO as Nome
+               ,PM_DT_DATA_HORA_CADASTRO	as Data_Hora_Cadastro
+               ,PM_ST_SITUACAO	as Situacao
+               ,PM_TX_MARCA	as Marca
+               ,PM_RS_CUSTO	as Custo
+               ,PM_RS_PERC_LUCRO	as PercLucro
+               ,PM_RS_PRECO_VENDA	as PrecoVenda
+               ,PM_RS_COMISSAO	as Comissao
+               ,PM_RS_LIQUIDO	as Liquido 
+               , GP.GP_CD_CODIGO as Grupo
+               , TP.TP_CD_CODIGO AS Tipo
+               , UM.UM_CD_SIGLA AS UnidadeMedida
+            FROM PRODUTO_MESTRE PM 
+            JOIN GRUPO GP ON PM.ID_GRUPO = GP.ID
+            JOIN TIPO TP ON PM.ID_TIPO = TP.ID
+            AND GP.ID = TP.ID_Grupo 
+            JOIN UNIDADE_MEDIDA UM ON PM.ID_UNIDADE_MEDIDA = UM.ID 
+
+          ";
+
+        public static string BuscarGrupo => @"
+
+           SELECT ID FROM GRUPO WHERE GP_CD_CODIGO = @Grupo
+         ";
+        public static string BuscarTipo => @"
+
+           SELECT ID FROM TIPO  WHERE  TP_CD_CODIGO = @Tipo
+         ";
+        public static string BuscarUnidade => @"
+
+            SELECT ID FROM UNIDADE_MEDIDA WHERE UM_CD_SIGLA = @Unidade
+         ";
+
 
         public static string BuscarProdutoExistente => @"
           SELECT 
@@ -30,50 +66,68 @@
           WHERE PRODUTO = @Produto
           ";
 
+        public static string VerificarProdutoExistente => @"
+           SELECT COUNT(*)
+           FROM PRODUTO_MESTRE
+           WHERE 
+               PM_CD_PRODUTO = @CodigoProduto
+               AND PM_TX_DESCRICAO = @Descricao
+               AND ID_TIPO = @IdTipo
+               AND ID_UNIDADE_MEDIDA = @IdUnidade;
+
+          ";
+
         public static string InserirNovoProduto => @"
          
-        INSERT INTO PRODUTO_MESTRE
-                   (PRODUTO
-                   ,DIGITO
-                   ,DESCRICAO
-                   ,DATA_HORA_CADASTRO
-                   ,SITUACAO
-                   ,TIPO
-                   ,GRUPO
-                   ,MARCA
-                   ,UNIDADE_MEDIDA
-                   ,CUSTO
-                   ,PERC_LUCRO
-                   ,PRECO_VENDA
-                   ,COMISSAO
-                   ,LIQUIDO)
-             VALUES
-                   (@PRODUTO
-                   ,@DIGITO
-                   ,@DESCRICAO
-                   ,GETDATE()
+           INSERT INTO dbo.PRODUTO_MESTRE
+                   (PM_CD_PRODUTO
+                   ,PM_CD_DIGITO
+                   ,PM_TX_DESCRICAO
+                   ,PM_DT_DATA_HORA_CADASTRO
+                   ,PM_ST_SITUACAO
+                   ,PM_TX_MARCA
+                   ,PM_RS_CUSTO
+                   ,PM_RS_PERC_LUCRO
+                   ,PM_RS_PRECO_VENDA
+                   ,PM_RS_COMISSAO
+                   ,PM_RS_LIQUIDO
+                   ,ID_TIPO
+                   ,ID_GRUPO
+                   ,ID_UNIDADE_MEDIDA)
+           VALUES
+                   (@PM_CD_PRODUTO
+                   ,@PM_CD_DIGITO
+                   ,@PM_TX_DESCRICAO 
+                   ,GETDATE() 
                    ,'A'
-                   ,@TIPO, 
-                   ,@GRUPO, 
-                   ,@MARCA
-                   ,@UNIDADE_MEDIDA, 
-                   ,@CUSTO
-                   ,@PERC_LUCRO
-                   ,@PRECO_VENDA
-                   ,@COMISSAO
-                   ,@LIQUIDO)      ";
+                   ,@PM_TX_MARCA 
+                   ,@PM_RS_CUSTO      
+                   ,@PM_RS_PERC_LUCRO 
+                   ,@PM_RS_PRECO_VENDA
+                   ,@PM_RS_COMISSAO   
+                   ,@PM_RS_LIQUIDO    
+                   ,@ID_TIPO 
+                   ,@ID_GRUPO
+                   ,@ID_UNIDADE_MEDIDA
+        		   )     ";
 
         public static string AlterarSituacaoProduto => @"
           UPDATE PRODUTO_MESTRE 
-             SET SITUACAO = @Situacao
-             WHERE PRODUTO = @Produto 
-             AND DIGITO = @Digito"
+             SET PM_ST_SITUACAO = @Situacao
+             WHERE PM_CD_PRODUTO = @Produto 
+             AND PM_CD_DIGITO = @Digito"
+        ; 
+        public static string EditarProduto => @"
+           UPDATE PRODUTO_MESTRE 
+             SET PM_RS_CUSTO = @Custo
+             ,PM_RS_PERC_LUCRO = @PercLucro
+             ,PM_RS_PRECO_VENDA = @PrecoVenda
+             ,PM_RS_COMISSAO = @Comissao
+             ,PM_RS_LIQUIDO = @Liquido
+           WHERE PM_CD_PRODUTO = @Produto 
+          AND PM_CD_DIGITO = @Digito"
         ;
-        public static string DeletarProduto => @"
-          DELETE PRODUTO_MESTRE 
-             WHERE PRODUTO = @Produto 
-             AND DIGITO = @Digito"
-      ;
+
 
     }
 

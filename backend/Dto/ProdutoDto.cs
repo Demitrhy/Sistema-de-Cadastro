@@ -14,6 +14,9 @@
         public int? PrecoVenda { get; set; }
         public decimal? Comissao { get; set; }
         public decimal? Liquido { get; set; }
+        public int? Id_Grupo { get; set; }
+        public int? Id_Tipo { get; set; }
+        public int? Id_Unidade { get; set; }
 
 
     }

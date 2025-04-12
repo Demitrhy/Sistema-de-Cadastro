@@ -1,5 +1,6 @@
 export interface Produto {
     produto: number;
+    digito:number;
     custo: number;
     nome: string;
     marca:string;

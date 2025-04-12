@@ -5,12 +5,12 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7014;http://localhost:5068",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "SERVER": "localhost\\SQLEXPRESS",
-        "DATABASE": "Cosmos_v14b"
+        "environmentVariables": {
+            "ASPNETCORE_ENVIRONMENT": "Development",
+            "SERVER": "localhost\\SQLEXPRESS",
+            "DATABASE": "Cosmos_v14b"
 
-      },
+        },
       "dotnetRunMessages": true
     },
     "IIS Express": {
