@@ -2,9 +2,11 @@
 using LOG_RT_DISTRIBUICAO_CORE.Dto;
 using LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio.Interface;
 using LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio.Script;
+using Microsoft.IdentityModel.Logging;
 using System.Data.SqlClient;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio
 {
@@ -85,6 +87,44 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio
 
             }
         }
+        public int VerificarSeExisteCodigo(int produto)
+        {
+            using (var connection = new SqlConnection(_sqlConnection.ConnectionString))
+            {
+                connection.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("CodigoProduto", produto);
+
+                int buscar = connection.QueryFirstOrDefault<int>(ProdutoScript.VerificarProdutoExistente, parameters);
+
+                connection.Close();
+
+                return buscar;
+
+            }
+        }
+        public async Task<int> BuscarMaiorCodigo()
+        {
+            using (var conexao = new SqlConnection(_sqlConnection.ConnectionString))
+            {
+                conexao.Open();
+
+                var menorDisponivel = await conexao.ExecuteScalarAsync<int?>(ProdutoScript.BuscarMenorProduto);
+
+                if (menorDisponivel.HasValue)
+                    return menorDisponivel.Value;
+
+                var buscar = await conexao.ExecuteScalarAsync<int>(ProdutoScript.BuscarMaiorProduto);
+                conexao.Close();
+
+                return buscar;
+            }
+
+        
+        }
+
+
         public int BuscarTipo(string tipo)
         {
             using (var connection = new SqlConnection(_sqlConnection.ConnectionString))
@@ -140,7 +180,7 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio
             }
         }
 
-        public async Task InserirProdutoNovo(List<ProdutoDto> produto, int digito, int tipo, int grupo, int unidade)
+        public async Task InserirProdutoNovo(List<ProdutoDto> produto, int produtoAleatorio , int digito, int tipo, int grupo, int unidade)
         {
 
             using (var connection = new SqlConnection(_sqlConnection.ConnectionString))
@@ -150,10 +190,11 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio
                 foreach (var item in produto)
                 {
                     DynamicParameters parameters = new DynamicParameters();
-                    parameters.Add("PM_CD_PRODUTO", item.Produto);
+                    parameters.Add("PM_CD_PRODUTO", item.codigoBloqueado  == false ? item.Produto : produtoAleatorio );
                     parameters.Add("PM_CD_DIGITO", digito);
                     parameters.Add("PM_TX_DESCRICAO", item.Nome);
                     parameters.Add("PM_TX_MARCA", item.Marca);
+                    parameters.Add("PM_ST_SITUACAO", item.Situacao);
                     parameters.Add("UNIDADE_MEDIDA", item.UnidadeMedida);
                     parameters.Add("PM_RS_CUSTO", item.Custo);
                     parameters.Add("PM_RS_PERC_LUCRO", item.PercLucro);
@@ -187,7 +228,7 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio
                 connection.Close();
             }
         }
-       public async Task EditarProduto(int produto, int digito, decimal? liquido, decimal? comissao, decimal? precoVenda, decimal? percLucro, decimal? custo)
+        public async Task EditarProduto(int produto, int digito, decimal? liquido, decimal? comissao, decimal? precoVenda, decimal? percLucro, decimal? custo)
         {
             using (var connection = new SqlConnection(_sqlConnection.ConnectionString))
             {
@@ -207,6 +248,6 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio
                 connection.Close();
             }
         }
-      
+
     }
 }

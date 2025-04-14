@@ -11,11 +11,13 @@ const api = axios.create({
 
 export async function Importar(produtos: Produto[]): Promise<void> {
   try {
+    console.log("passei por aqui", produtos)
     await api.post('/Produto/Importar', produtos);
   } catch (error) {
     throw error;
   }
 }
+
 export async function Editar
   (
     dados: {

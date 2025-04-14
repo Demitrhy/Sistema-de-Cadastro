@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using System.Data.SqlClient;
 using System.Reflection.Metadata.Ecma335;
+using System.Text.RegularExpressions;
 
 namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Service
 {
@@ -36,24 +37,40 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Service
         {
             try
             {
-
                 int digitoAleatorio = _random.Next(1, 10);
                 foreach (var produto in produtos)
                 {
-
-                    var tipo = _produtoRepositorio.BuscarTipo(produto.Tipo);
-                    var grupo = _produtoRepositorio.BuscarGrupo(produto.Grupo);
-                    var unidade = _produtoRepositorio.BuscarUnidade(produto.UnidadeMedida);
-                    var buscar = _produtoRepositorio.VerificarSeExisteProduto(produto);
-
-                    if (buscar == 0)
+                    if (produto.codigoBloqueado == false)
                     {
+                        int produtoAleatorio = 0;
+                        var tipo = _produtoRepositorio.BuscarTipo(produto.Tipo);
+                        var grupo = _produtoRepositorio.BuscarGrupo(produto.Grupo);
+                        var unidade = _produtoRepositorio.BuscarUnidade(produto.UnidadeMedida);
+                        var buscar = _produtoRepositorio.VerificarSeExisteProduto(produto);
 
-                        await _produtoRepositorio.InserirProdutoNovo(produtos, digitoAleatorio, tipo, grupo, unidade);
+                        if (buscar == 0)
+                        {
 
+                            await _produtoRepositorio.InserirProdutoNovo(produtos, produtoAleatorio, digitoAleatorio, tipo, grupo, unidade);
+
+                        }
+                        else
+                            throw new Exception($"Esse produto {produto.Produto} já existe!");
                     }
                     else
-                        throw new Exception($"Esse produto {produto.Produto} já existe!");
+                    {
+
+                        var tipo = _produtoRepositorio.BuscarTipo(produto.Tipo);
+                        var grupo = _produtoRepositorio.BuscarGrupo(produto.Grupo);
+                        var unidade = _produtoRepositorio.BuscarUnidade(produto.UnidadeMedida);
+
+                        int produtoAleatorio = _random.Next(1, 1000000000);
+                        int produtoCodigo = await _produtoRepositorio.BuscarMaiorCodigo();
+
+            
+                        await _produtoRepositorio.InserirProdutoNovo(produtos, produtoCodigo, digitoAleatorio, tipo, grupo, unidade);
+
+                    }
                 }
             }
             catch (ArgumentException e)
@@ -95,9 +112,9 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Service
         {
             try
             {
-                await _produtoRepositorio.EditarProduto(produto,digito,liquido,comissao,precoVenda,percLucro,custo);
+                await _produtoRepositorio.EditarProduto(produto, digito, liquido, comissao, precoVenda, percLucro, custo);
             }
-            catch (ArgumentException e) 
+            catch (ArgumentException e)
             {
                 throw new ArgumentException("Algo deu errado ao editar o produto");
             }

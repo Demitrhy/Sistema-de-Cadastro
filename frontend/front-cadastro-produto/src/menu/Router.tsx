@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CadastroIndividual from '../pages/CadastroDeProdutos/CadastroIndividual';
-import Fornecedor from '../pages/CadastroDeProdutos/Fornecedor';
+
 
 const Menu: React.FC = () => {
   const [pagina, setPagina] = useState<'individual' | 'fornecedor'>('individual');
@@ -11,8 +11,6 @@ const Menu: React.FC = () => {
     switch (pagina) {
       case 'individual':
         return <CadastroIndividual />;
-      case 'fornecedor':
-        return <Fornecedor />;
       default:
         return null;
     }
@@ -23,7 +21,7 @@ const Menu: React.FC = () => {
       {/* Menu lateral */}
       <aside
         style={{
-          width: menuAberto ? '180px' : '30px',
+          width: menuAberto ? '190px' : '50px',
           backgroundColor: '#f1f1f1',
           padding: '10px',
           borderRight: '1px solid #ccc',
@@ -67,15 +65,7 @@ const Menu: React.FC = () => {
             >
               Cadastro Individual
             </li>
-            <li
-              style={{
-                cursor: 'pointer',
-                color: pagina === 'fornecedor' ? '#007bff' : '#333',
-              }}
-              onClick={() => setPagina('fornecedor')}
-            >
-              Fornecedor
-            </li>
+            
           </ul>
         )}
       </aside>
@@ -109,24 +99,7 @@ const Menu: React.FC = () => {
           >
             Cadastro Individual
           </div>
-          <div
-            onClick={() => {
-              setPagina('fornecedor');
-              setSubmenuProdutoAberto(false);
-            }}
-            style={{
-              backgroundColor: '#fff',
-              padding: '10px 20px',
-              border: '1px solid #ccc',
-              borderRadius: '8px',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-              cursor: 'pointer',
-              minWidth: '200px',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            Fornecedor
-          </div>
+          
         </div>
       )}
 

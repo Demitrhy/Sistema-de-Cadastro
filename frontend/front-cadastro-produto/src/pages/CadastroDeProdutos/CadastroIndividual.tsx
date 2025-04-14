@@ -8,9 +8,11 @@ import FormadorPreco from './FormadorPreco';
 const CadastroIndividual: React.FC = () => {
     const [planilha, setPlanilha] = useState<Array<Produto>>([]);
     const [abaAtiva, setAbaAtiva] = useState('produto'); // controla a aba atual
-    const [produto, setProduto] = useState(0);
+    const [produto, setProduto] = useState<number | ''>('');
+    const [codigoBloqueado, setCodigoBloqueado] = useState(false);
+    const [produtoAutomatico, setProdutoAutomatico] = useState(false);
     const [custo, setCusto] = useState(0);
-    const [digito, setDigito] = useState(0);
+    const [digito] = useState(0);
     const [percLucro, setPercentualLucro] = useState(0);
     const [precoVenda, setPrecoVenda] = useState(0);
     const [comissao, setComissao] = useState(0);
@@ -20,6 +22,7 @@ const CadastroIndividual: React.FC = () => {
     const [marca, setMarca] = useState("");
     const [tipo, setTipo] = useState("");
     const [grupo, setGrupo] = useState("");
+    const [situacao, setSituacao] = useState("");
     const [loading, setLoading] = useState(false);
 
 
@@ -35,6 +38,7 @@ const CadastroIndividual: React.FC = () => {
         setGrupo("");
         setMarca("");
         setUnidade("");
+        setSituacao("");
     };
 
     const limparPlanilha = () => {
@@ -49,34 +53,58 @@ const CadastroIndividual: React.FC = () => {
         setLiquido(liquidoCalc);
     }, [custo, percLucro, comissao]);
 
-
     const adicionarProduto = () => {
-        if (produto > 0 && custo > 0 && tipo.trim() && nome.trim()) {
+        const produtoValido =
+            produtoAutomatico || codigoBloqueado || (typeof produto === 'number' && produto > 0);
+    
+        const camposObrigatoriosPreenchidos =
+            custo > 0 &&
+            tipo.trim() !== '' &&
+            nome.trim() !== '' &&
+            marca.trim() !== '' &&
+            grupo.trim() !== '' &&
+            unidade.trim() !== '' &&
+            situacao.trim() !== '' &&
+            percLucro > 0 &&
+            comissao > 0 &&
+            liquido > 0;
+    
+      
+    
+        if (produtoValido && camposObrigatoriosPreenchidos) {
             const novoItem: Produto = {
-                produto,
+                produto: produtoAutomatico || codigoBloqueado ? 0 : Number(produto),
+                codigoBloqueado,
                 custo,
                 percLucro,
                 comissao,
                 precoVenda,
                 liquido,
                 digito,
+                situacao: situacao.trim(),
                 marca: marca.trim(),
                 tipo: tipo.trim(),
                 nome: nome.trim(),
                 grupo: grupo.trim(),
                 unidadeMedida: unidade.trim()
             };
+    
             setPlanilha((prev) => [...prev, novoItem]);
+            toast.success('✅ Produto adicionado à tabela!');
             limparCampos();
         } else {
-            alert("Preencha todos os campos antes de adicionar o produto.");
+            toast.error("❌ Preencha todos os campos obrigatórios antes de adicionar o produto.");
         }
     };
+    
+    
+
 
     const Importa = async () => {
         setLoading(true);
 
         try {
+            console.log("PAssei por aqui", planilha)
             await Importar(planilha);
             toast.success('✅ Produto importado com sucesso!');
             setPlanilha([]);
@@ -88,6 +116,7 @@ const CadastroIndividual: React.FC = () => {
         }
 
     };
+
     return (
         <div style={{
             backgroundColor: '#f9f9f9',
@@ -105,12 +134,12 @@ const CadastroIndividual: React.FC = () => {
                         background: 'transparent',
                         border: 'none',
                         borderBottom: abaAtiva === 'produto' ? '2px solid red' : 'none',
-                        padding: '10px 15px',
+                        appearance: 'textfield',
                         cursor: 'pointer',
                         fontWeight: 'bold',
                     }}
                 >
-                    Produto ou Serviço
+                    Novo Produto
                 </button>
                 <button
                     onClick={() => setAbaAtiva('formador')}
@@ -143,22 +172,33 @@ const CadastroIndividual: React.FC = () => {
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                             <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Código</label>
                             <input
-                                type="number"
-                                placeholder="Produto"
-                                value={produto}
-                                onChange={(e) => setProduto(parseInt(e.target.value))}
-                                min={1}
+                                  type="number"
+                                  placeholder="Produto"
+                                  value={produto}
+                                  onChange={(e) => setProduto(e.target.value === '' ? '' : parseInt(e.target.value))}
+                                  min={1}
+                                  disabled={codigoBloqueado}
                                 style={{
                                     padding: '5px',
-                                    appearance: 'textfield', // Firefox
+                                    appearance: 'textfield',
                                     fontSize: '16px',
                                     borderRadius: '4px',
                                     border: '1px solid #ccc',
                                     width: '240px',
+                                    backgroundColor: codigoBloqueado ? '#e0e0e0' : 'white',
                                 }}
                             />
-                        </div>
 
+                            <label style={{ marginTop: '10px', display: 'flex', alignItems: 'center', fontSize: '14px' }}>
+                                <input
+                                    type="checkbox"
+                                    checked={codigoBloqueado}
+                                    onChange={(e) => setCodigoBloqueado(e.target.checked)}
+                                    style={{ marginRight: '6px' }}
+                                />
+                                Código Desabilitado
+                            </label>
+                        </div>
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                             <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Tipo</label>
                             <select
@@ -289,6 +329,26 @@ const CadastroIndividual: React.FC = () => {
 
                     <div style={{ display: 'flex', gap: '30px' }}>
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Status</label>
+                            <select
+                                value={situacao}
+                                onChange={(e) => setSituacao(e.target.value)}
+                                style={{
+                                    padding: '5px',
+                                    fontSize: '16px',
+                                    borderRadius: '4px',
+                                    appearance: 'textfield', // Firefox
+                                    border: '1px solid #ccc',
+                                    width: '170px',
+                                }}>
+                                <option value="">Selecione...</option>
+                                <option value="A">Ativo</option>
+                                <option value="S">Suspenso </option>
+                                <option value="D">Desativado</option>
+                            </select>
+
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
                             <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Custo</label>
                             <input
                                 type="number"
@@ -386,33 +446,34 @@ const CadastroIndividual: React.FC = () => {
                         boxShadow: '0 2px 6px rgba(0, 0, 0, 0.05)',
                         marginTop: '10px'
                     }}>
-                        <h3 style={{ marginBottom: '-19px' }}>Lista de Produtos</h3>
 
                         <div style={{ display: 'flex', gap: '10px', marginBottom: '15px', justifyContent: 'flex-end' }}>
                             <button
                                 onClick={adicionarProduto}
                                 disabled={
-                                    produto <= 0 ||
+                                    (!produtoAutomatico && !codigoBloqueado && (produto === '' || typeof produto !== 'number' || produto <= 0)) ||
                                     custo <= 0 ||
                                     tipo.trim() === '' ||
                                     nome.trim() === '' ||
                                     marca.trim() === '' ||
                                     grupo.trim() === '' ||
                                     unidade.trim() === '' ||
+                                    situacao.trim() === '' ||
                                     percLucro <= 0 ||
                                     comissao <= 0 ||
                                     liquido <= 0 ||
                                     loading
-                                }
+                                  }
                                 style={{
                                     opacity:
-                                        produto <= 0 ||
+                                    (!produtoAutomatico && !codigoBloqueado && (produto === '' || typeof produto !== 'number' || produto <= 0)) ||
                                             custo <= 0 ||
                                             tipo.trim() === '' ||
                                             nome.trim() === '' ||
                                             marca.trim() === '' ||
                                             grupo.trim() === '' ||
                                             unidade.trim() === '' ||
+                                            situacao.trim() === '' ||
                                             percLucro <= 0 ||
                                             comissao <= 0 ||
                                             liquido <= 0 ||
@@ -420,13 +481,14 @@ const CadastroIndividual: React.FC = () => {
                                             ? 0.5
                                             : 1,
                                     cursor:
-                                        produto <= 0 ||
+                                    (!produtoAutomatico && !codigoBloqueado && (produto === '' || typeof produto !== 'number' || produto <= 0)) ||
                                             custo <= 0 ||
                                             tipo.trim() === '' ||
                                             nome.trim() === '' ||
                                             marca.trim() === '' ||
                                             grupo.trim() === '' ||
                                             unidade.trim() === '' ||
+                                            situacao.trim() === '' ||
                                             percLucro <= 0 ||
                                             comissao <= 0 ||
                                             liquido <= 0 ||
@@ -487,23 +549,26 @@ const CadastroIndividual: React.FC = () => {
                                     <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Marca</th>
                                     <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Tipo</th>
                                     <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Grupo</th>
+                                    <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Situacao</th>
                                     <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Unid. Medida</th>
                                     <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Custo</th>
                                     <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Perc. Lucro (%)</th>
                                     <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Preço Venda (R$)</th>
                                     <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Comissão (%)</th>
                                     <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Líquido (R$)</th>
-                                    <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Editar</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {planilha.map((item: Produto, idx: number) => (
                                     <tr key={idx}>
-                                        <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.produto}</td>
+                                        <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>
+                                            {item.produto > 0 ? item.produto : 'Automático'}
+                                        </td>
                                         <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.nome}</td>
                                         <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.marca}</td>
                                         <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.tipo}</td>
                                         <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.grupo}</td>
+                                        <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.situacao}</td>
                                         <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.unidadeMedida}</td>
                                         <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.custo}</td>
                                         <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.percLucro}</td>

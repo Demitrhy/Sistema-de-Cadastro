@@ -9,14 +9,15 @@
         public string? Grupo { get; set; }
         public string? Marca { get; set; }
         public string? UnidadeMedida { get; set; }
-        public int? Custo { get; set; }
-        public int? PercLucro { get; set; }
-        public int? PrecoVenda { get; set; }
+        public decimal? Custo { get; set; }
+        public decimal? PercLucro { get; set; }
+        public decimal? PrecoVenda { get; set; }
         public decimal? Comissao { get; set; }
         public decimal? Liquido { get; set; }
         public int? Id_Grupo { get; set; }
         public int? Id_Tipo { get; set; }
         public int? Id_Unidade { get; set; }
+        public bool? codigoBloqueado { get; set; }
 
 
     }

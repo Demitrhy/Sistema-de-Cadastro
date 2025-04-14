@@ -63,7 +63,22 @@
           SELECT 
             COUNT(*)
           FROM PRODUTO_MESTRE
-          WHERE PRODUTO = @Produto
+          WHERE PM_CD_PRODUTO = @Produto
+          ";
+
+        public static string BuscarMaiorProduto => @"
+          SELECT ISNULL(MAX(PM_CD_PRODUTO), 0) + 1 FROM PRODUTO_MESTRE
+               
+
+          ";
+        public static string BuscarMenorProduto => @"
+            SELECT TOP 1 n FROM (
+            SELECT ROW_NUMBER() OVER (ORDER BY PM_CD_PRODUTO) AS n, PM_CD_PRODUTO
+            FROM PRODUTO_MESTRE
+            ) AS t
+            WHERE n <> PM_CD_PRODUTO
+            ORDER BY n
+               
           ";
 
         public static string VerificarProdutoExistente => @"
@@ -71,9 +86,7 @@
            FROM PRODUTO_MESTRE
            WHERE 
                PM_CD_PRODUTO = @CodigoProduto
-               AND PM_TX_DESCRICAO = @Descricao
-               AND ID_TIPO = @IdTipo
-               AND ID_UNIDADE_MEDIDA = @IdUnidade;
+               
 
           ";
 
@@ -99,7 +112,7 @@
                    ,@PM_CD_DIGITO
                    ,@PM_TX_DESCRICAO 
                    ,GETDATE() 
-                   ,'A'
+                   ,@PM_ST_SITUACAO
                    ,@PM_TX_MARCA 
                    ,@PM_RS_CUSTO      
                    ,@PM_RS_PERC_LUCRO 

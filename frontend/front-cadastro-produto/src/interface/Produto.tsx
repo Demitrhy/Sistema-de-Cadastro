@@ -1,5 +1,6 @@
 export interface Produto {
     produto: number;
+    situacao: string;
     digito:number;
     custo: number;
     nome: string;
@@ -11,4 +12,7 @@ export interface Produto {
     precoVenda:number;
     comissao:number;
     liquido:number;
+    codigoBloqueado?: boolean;
+
+   
   }

@@ -15,7 +15,6 @@ const FormadorPreco: React.FC = () => {
     const [precoVenda, setPrecoVenda] = useState(0);
     const [comissao, setComissao] = useState(0);
     const [liquido, setLiquido] = useState(0);
- 
 
     useEffect(() => {
         const preco = custo + (custo * percLucro / 100);
@@ -41,7 +40,7 @@ const FormadorPreco: React.FC = () => {
         try {
             const resultado = await BuscarProdutos();
             toast.success('Busca feita com  sucesso!');
-            setPlanilha(resultado);  // Atualiza a lista de produtos
+            setPlanilha(resultado);
         } catch (erro) {
             toast.error('Falha na busca dos produtos.');
             console.error(erro);
@@ -49,8 +48,7 @@ const FormadorPreco: React.FC = () => {
             setLoading(false);
         }
     };
-    
-    // useEffect para carregar os produtos apenas uma vez na montagem do componente
+
     useEffect(() => {
         carregarProdutos();
     }, []);
@@ -102,6 +100,7 @@ const FormadorPreco: React.FC = () => {
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Marca</th>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Tipo</th>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Grupo</th>
+                            <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Situacao</th>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Unid. Medida</th>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Custo</th>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Perc. Lucro (%)</th>
@@ -119,6 +118,7 @@ const FormadorPreco: React.FC = () => {
                                 <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.marca}</td>
                                 <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.tipo}</td>
                                 <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.grupo}</td>
+                                <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.situacao}</td>
                                 <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.unidadeMedida}</td>
                                 <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.custo}</td>
                                 <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.percLucro}</td>
@@ -190,6 +190,10 @@ const FormadorPreco: React.FC = () => {
 
                             {/* Terceira linha */}
                             <div style={{ display: 'flex', gap: '10px' }}>
+                                <div style={{ flex: 1 }}>
+                                    <label style={{ color: '#fff' }}>Status</label>
+                                    <Form.Control disabled defaultValue={produtoSelecionado.situacao} />
+                                </div>
                                 <div style={{ flex: 1 }}>
                                     <label style={{ color: '#fff' }}>Custo</label>
                                     <Form.Control

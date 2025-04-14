@@ -10,7 +10,9 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio.Interface {
         int BuscarGrupo(string tipo);
         int BuscarUnidade(string tipo);
         int VerificarSeExisteProduto(ProdutoDto produto);
-        Task InserirProdutoNovo(List<ProdutoDto> produto, int digito, int tipo, int grupo, int unidade);
+        int VerificarSeExisteCodigo(int produto);
+        Task<int> BuscarMaiorCodigo();
+        Task InserirProdutoNovo(List<ProdutoDto> produto,int produtoAleatorio, int digito, int tipo, int grupo, int unidade);
         Task MudarProdutoNovo(int produto, int digito, string situacao);
         Task EditarProduto(int produto, int digito, decimal? liquido, decimal? comissao, decimal? precoVenda, decimal? percLucro, decimal? custo);
     }
