@@ -1,32 +1,41 @@
-using LOG_RT_DISTRIBUICAO_CORE;
+Ôªøusing LOG_RT_DISTRIBUICAO_CORE;
 using System;
 using System.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using LOG_RT_DISTRIBUICAO_CORE.Interface.Service;
 using LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio.Interface;
 using LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio;
+using LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio.LOG_RT_DISTRIBUICAO_CORE.Repositorio;
 
-public class Program {
-    public static void Main(string[] args) {
+public class Program
+{
+    public static void Main(string[] args)
+    {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Obter vari·veis de ambiente
+        // Obter vari√°veis de ambiente
         string server = Environment.GetEnvironmentVariable("SERVER");
         string database = Environment.GetEnvironmentVariable("DATABASE");
 
-        if (string.IsNullOrEmpty(server) || string.IsNullOrEmpty(database)) {
-            throw new InvalidOperationException("As vari·veis de ambiente 'SERVER' ou 'DATABASE' n„o est„o configuradas corretamente.");
+        if (string.IsNullOrEmpty(server) || string.IsNullOrEmpty(database))
+        {
+            throw new InvalidOperationException("As vari√°veis de ambiente 'SERVER' ou 'DATABASE' n√£o est√£o configuradas corretamente.");
         }
+        string connectionString = $"Server={server};Database={database};Trusted_Connection=True;TrustServerCertificate=True;";
 
-        string connectionString = $"Server={server};Database={database};Trusted_Connection=True;";
 
-        // ServiÁos
+        // Servi√ßos
         builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseSqlServer(connectionString)); // ‚úÖ corrigido aqui
 
         builder.Services.AddScoped<SqlConnection>(_ => new SqlConnection(connectionString));
         builder.Services.AddScoped<IProdutoRepositorio, ProdutoRepositorio>();
         builder.Services.AddScoped<IProdutoService, ProdutoService>();
+        builder.Services.AddScoped<ILogin, LoginService>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+
+
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
@@ -35,7 +44,7 @@ public class Program {
         // CORS
         builder.Services.AddCors(options => {
             options.AddPolicy("PermitirReact", policy => {
-                policy.WithOrigins("http://localhost:3000", "https://localhost:3000") // cobre os dois casos
+                policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
                       .AllowAnyHeader()
                       .AllowAnyMethod();
             });
@@ -44,14 +53,14 @@ public class Program {
         var app = builder.Build();
 
         // Middlewares
-        if (app.Environment.IsDevelopment()) {
+        if (app.Environment.IsDevelopment())
+        {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
 
         app.UseHttpsRedirection();
 
-        // ATEN«√O: UseCors deve vir antes do UseAuthorization e MapControllers
         app.UseCors("PermitirReact");
 
         app.UseAuthorization();

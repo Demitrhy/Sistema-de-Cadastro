@@ -1,8 +1,12 @@
+// Menu.tsx
 import React, { useState } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import CadastroIndividual from '../pages/CadastroDeProdutos/CadastroIndividual';
+import Login from '../pages/Login/Login';
+import { PrivateRoute } from '../components/PrivateRoute';
+import CadastroNovo from '../pages/Login/CadastroNovo';
 
-
-const Menu: React.FC = () => {
+const Home: React.FC = () => {
   const [pagina, setPagina] = useState<'individual' | 'fornecedor'>('individual');
   const [menuAberto, setMenuAberto] = useState(false);
   const [submenuProdutoAberto, setSubmenuProdutoAberto] = useState(false);
@@ -52,7 +56,7 @@ const Menu: React.FC = () => {
           {menuAberto && <strong>Produto</strong>}
         </div>
 
-        {/* Submenu (dentro do menu se estiver aberto) */}
+        {/* Submenu */}
         {menuAberto && (
           <ul style={{ listStyle: 'none', padding: 0, marginTop: '10px' }}>
             <li
@@ -65,13 +69,12 @@ const Menu: React.FC = () => {
             >
               Cadastro Individual
             </li>
-            
           </ul>
         )}
       </aside>
 
-       {/* Blocos flutuantes fora do menu lateral */}
-       {!menuAberto && submenuProdutoAberto && (
+      {/* Bloco flutuante do submenu */}
+      {!menuAberto && submenuProdutoAberto && (
         <div style={{
           position: 'absolute',
           left: '70px',
@@ -99,14 +102,36 @@ const Menu: React.FC = () => {
           >
             Cadastro Individual
           </div>
-          
         </div>
       )}
 
       {/* Conteúdo da página */}
-      <main style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>{renderConteudo()}</main>
+      <main style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
+        {renderConteudo()}
+      </main>
     </div>
   );
 };
 
-export default Menu;
+// Esse é o componente principal que define as rotas da aplicação
+const AppRoutes: React.FC = () => {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/cadastro" element={<CadastroNovo children={undefined}  />} />
+      <Route
+        path="/home"
+        element={
+          <PrivateRoute>
+            <Home />
+          </PrivateRoute>
+        }
+      />
+      {/* Redirecionamento padrão */}
+      <Route path="*" element={<Navigate to="/home" />} />
+
+    </Routes>
+  );
+};
+
+export default AppRoutes;

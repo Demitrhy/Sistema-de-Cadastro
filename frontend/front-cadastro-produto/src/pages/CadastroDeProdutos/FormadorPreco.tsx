@@ -78,7 +78,7 @@ const FormadorPreco: React.FC = () => {
         };
 
         try {
-            console.log("Passei por aqui novamente ", dadosAtualizados)
+     
             await Editar(dadosAtualizados);
             toast.success('Produto salvo com sucesso!');
             carregarProdutos();

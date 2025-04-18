@@ -13,6 +13,13 @@ export interface Produto {
     comissao:number;
     liquido:number;
     codigoBloqueado?: boolean;
-
    
+  }
+
+  export interface CadastroLogin {
+    nome: string;
+    sobreNome: string;
+    telefone:string;
+    email:string;
+    senha:string;
   }

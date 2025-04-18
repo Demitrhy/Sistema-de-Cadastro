@@ -102,9 +102,8 @@ const CadastroIndividual: React.FC = () => {
 
     const Importa = async () => {
         setLoading(true);
-
         try {
-            console.log("PAssei por aqui", planilha)
+           
             await Importar(planilha);
             toast.success('✅ Produto importado com sucesso!');
             setPlanilha([]);
@@ -114,7 +113,6 @@ const CadastroIndividual: React.FC = () => {
         } finally {
             setLoading(false);
         }
-
     };
 
     return (
