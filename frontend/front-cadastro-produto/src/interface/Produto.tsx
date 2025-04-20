@@ -19,7 +19,8 @@ export interface Produto {
   export interface CadastroLogin {
     nome: string;
     sobreNome: string;
-    telefone:string;
+    telefone:number;
     email:string;
+    confirmarEmail:string;
     senha:string;
   }

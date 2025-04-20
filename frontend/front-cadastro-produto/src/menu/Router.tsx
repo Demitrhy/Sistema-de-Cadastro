@@ -1,109 +1,200 @@
 // Menu.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import CadastroIndividual from '../pages/CadastroDeProdutos/CadastroIndividual';
+import MeuPerfil from '../pages/Login/MeuPerfil';
 import Login from '../pages/Login/Login';
 import { PrivateRoute } from '../components/PrivateRoute';
 import CadastroNovo from '../pages/Login/CadastroNovo';
+import EsqueciSenha from '../pages/Login/EsqueciSenha';
+import VerificarCodigo from '../pages/Login/VerificarCodigo';
+import RedefinirSenha from '../pages/Login/RedefinirSenha';
+
 
 const Home: React.FC = () => {
-  const [pagina, setPagina] = useState<'individual' | 'fornecedor'>('individual');
-  const [menuAberto, setMenuAberto] = useState(false);
-  const [submenuProdutoAberto, setSubmenuProdutoAberto] = useState(false);
+  const [pagina, setPagina] = useState<'individual' | 'perfil'>('individual');
+  const [dropdownAberto, setDropdownAberto] = useState(false);
+  const [menuUsuarioAberto, setMenuUsuarioAberto] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const renderConteudo = () => {
     switch (pagina) {
       case 'individual':
         return <CadastroIndividual />;
+      case 'perfil':
+        return <MeuPerfil />;
       default:
         return null;
     }
   };
 
+  const Sair = () => {
+    navigate('/login')
+  } 
+ 
+
+  // Fecha o dropdown do usuário ao clicar fora
+  useEffect(() => {
+    const handleClickFora = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuUsuarioAberto(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickFora);
+    return () => document.removeEventListener('mousedown', handleClickFora);
+  }, []);
+
   return (
-    <div style={{ display: 'flex', height: '100vh', fontFamily: 'sans-serif' }}>
-      {/* Menu lateral */}
-      <aside
-        style={{
-          width: menuAberto ? '190px' : '50px',
-          backgroundColor: '#f1f1f1',
-          padding: '10px',
-          borderRight: '1px solid #ccc',
-          position: 'relative',
-          transition: 'width 0.3s',
-        }}
-      >
-        <button onClick={() => setMenuAberto(!menuAberto)}>
-          {menuAberto ? '◀' : '▶'}
-        </button>
+    <div style={{ fontFamily: 'sans-serif', height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* TopBar */}
+      <header style={{
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        padding: '12px 20px',
+        borderBottom: '2px solid #e0e0e0',
+        boxShadow: '0px 2px 4px rgba(0,0,0,0.05)',
+        position: 'relative'
+      }}>
+        {/* Lado esquerdo */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#003366' }}>
+            {"<Gustavo/>"}
+          </div>
 
-        {/* Menu Produto */}
-        <div
-          style={{
-            marginTop: '20px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-          }}
-          onClick={() => {
-            if (!menuAberto) {
-              setSubmenuProdutoAberto(!submenuProdutoAberto);
-            }
-          }}
-        >
-          <span>📦</span>
-          {menuAberto && <strong>Produto</strong>}
-        </div>
-
-        {/* Submenu */}
-        {menuAberto && (
-          <ul style={{ listStyle: 'none', padding: 0, marginTop: '10px' }}>
-            <li
+          {/* Dropdown Produto */}
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', marginLeft: '40px' }}>
+            <button
+              onClick={() => setDropdownAberto(!dropdownAberto)}
               style={{
+                background: 'none',
+                border: 'none',
                 cursor: 'pointer',
-                marginBottom: '10px',
-                color: pagina === 'individual' ? '#007bff' : '#333',
+                fontSize: '1rem',
+                fontWeight: 'bold',
+                color: '#003366',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
               }}
-              onClick={() => setPagina('individual')}
             >
-              Cadastro Individual
-            </li>
-          </ul>
-        )}
-      </aside>
+              Produto
+              <span style={{ transform: dropdownAberto ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                ▼
+              </span>
+            </button>
 
-      {/* Bloco flutuante do submenu */}
-      {!menuAberto && submenuProdutoAberto && (
-        <div style={{
-          position: 'absolute',
-          left: '70px',
-          top: '80px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px',
-          zIndex: 10,
-        }}>
-          <div
-            onClick={() => {
-              setPagina('individual');
-              setSubmenuProdutoAberto(false);
-            }}
-            style={{
-              backgroundColor: '#fff',
-              padding: '10px 20px',
-              border: '1px solid #ccc',
-              borderRadius: '8px',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-              cursor: 'pointer',
-              minWidth: '200px',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            Cadastro Individual
+            {dropdownAberto && (
+              <div style={{
+                position: 'absolute',
+                top: '40px',
+                left: '0',
+                backgroundColor: '#fff',
+                borderRadius: '8px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                padding: '8px 0',
+                minWidth: '220px',
+                marginLeft: '-45px',
+                zIndex: 10,
+              }}>
+                <div
+                  onClick={() => {
+                    setPagina('individual');
+                    setDropdownAberto(false);
+                  }}
+                  style={{
+                    padding: '12px 20px',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    fontWeight: pagina === 'individual' ? 'bold' : 'normal',
+                    color: '#003366',
+                    transition: 'background-color 0.2s',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f5f5f5')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                >
+                  Cadastro Individual
+                </div>
+              </div>
+            )}
           </div>
         </div>
-      )}
+
+        {/* Lado direito - Avatar e menu do usuário */}
+        <div style={{ marginLeft: 'auto', position: 'relative' }} ref={menuRef}>
+          <div
+            style={{
+              backgroundColor: '#003366',
+              color: 'white',
+              borderRadius: '50%',
+              width: '32px',
+              height: '32px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+            onClick={() => setMenuUsuarioAberto(!menuUsuarioAberto)}
+          >
+            G
+          </div>
+
+          {menuUsuarioAberto && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '40px',
+                right: 0,
+                backgroundColor: 'white',
+                border: '1px solid #ddd',
+                borderRadius: '8px',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                minWidth: '160px',
+                zIndex: 1000,
+                padding: '8px 0'
+              }}
+            >
+              <button
+                onClick={() => {
+                  setPagina('perfil');
+                  setMenuUsuarioAberto(false);
+                }}
+                style={{
+                  width: '100%',
+                  padding: '10px 16px',
+                  textAlign: 'left',
+                  border: 'none',
+                  background: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Meu perfil
+              </button>
+              <div style={{
+                height: '1px',
+                backgroundColor: '#ddd',
+                margin: '4px 0'
+              }} />
+              <button
+                onClick={Sair}
+                style={{
+                  width: '100%',
+                  padding: '10px 16px',
+                  textAlign: 'left',
+                  border: 'none',
+                  background: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Sair
+              </button>
+            </div>
+          )}
+        </div>
+      </header>
 
       {/* Conteúdo da página */}
       <main style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
@@ -118,9 +209,13 @@ const AppRoutes: React.FC = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="/cadastro" element={<CadastroNovo children={undefined}  />} />
+      <Route path="/esqueciSenha" element={<EsqueciSenha onSuccess={function (contato: string): void { throw new Error('Function not implemented.'); }} />} />
+      <Route path="/verificarCodigo" element={<VerificarCodigo />} />
+      <Route path="/redefinirSenha" element={<RedefinirSenha />} />
+      <Route path="/cadastro" element={<CadastroNovo children={undefined} />} />
+      <Route path="/meuPerfil" element={<CadastroNovo children={undefined} />} />
       <Route
-        path="/home"
+        path="/CadastroProduto"
         element={
           <PrivateRoute>
             <Home />
@@ -128,7 +223,7 @@ const AppRoutes: React.FC = () => {
         }
       />
       {/* Redirecionamento padrão */}
-      <Route path="*" element={<Navigate to="/home" />} />
+      <Route path="*" element={<Navigate to="/Login" />} />
 
     </Routes>
   );

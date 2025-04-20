@@ -2,6 +2,11 @@
 {
     public class ProdutoScript
     {
+        public static string BuscarDadosUsuario => @"
+           SELECT Id,	Nome,	SobreNome,	Telefone,	Email
+             FROM USUARIO 
+            
+          ";
 
         public static string BuscarProduto => @"
          SELECT
@@ -141,6 +146,7 @@
           AND PM_CD_DIGITO = @Digito"
         ;
 
+        
 
     }
 

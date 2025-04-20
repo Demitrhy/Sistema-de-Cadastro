@@ -21,18 +21,23 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Controllers
             _userRepository = userRepository;
         }
 
-
+        [HttpGet("BuscarUsuario")]
+        public IEnumerable<UserDto> GetAll()
+        {
+            var dados = _userRepository.BuscarUsuarioExistente();
+            return dados;
+        }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserLoginDto dto)
         {
-            // Validação de dados (aqui você pode adicionar outras validações)
+
             if (string.IsNullOrEmpty(dto.Email) || string.IsNullOrEmpty(dto.Senha))
             {
                 return BadRequest("Email e senha são obrigatórios.");
             }
 
-            // Verificar se o email já existe no banco
+
             var userExists = await _userRepository.GetByEmailAsync(dto.Email);
             if (userExists != null)
             {

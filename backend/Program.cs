@@ -31,9 +31,10 @@ public class Program
         builder.Services.AddScoped<SqlConnection>(_ => new SqlConnection(connectionString));
         builder.Services.AddScoped<IProdutoRepositorio, ProdutoRepositorio>();
         builder.Services.AddScoped<IProdutoService, ProdutoService>();
+        builder.Services.AddScoped<ICodigoService, CodigoService>();
         builder.Services.AddScoped<ILogin, LoginService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
-
+      
 
 
 
@@ -58,6 +59,7 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
 
         app.UseHttpsRedirection();
 

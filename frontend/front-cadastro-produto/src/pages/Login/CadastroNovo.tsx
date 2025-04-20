@@ -3,8 +3,6 @@ import { CadastroLogin } from "../../interface/Produto";
 import { toast } from "react-toastify";
 import { CadastroLoginNovo } from "../../api/Api";
 import { Link } from "react-router-dom";
-
-
 interface CadastroNovoProps {
     children: React.ReactNode;
 }
@@ -13,33 +11,44 @@ const CadastroNovo: React.FC<CadastroNovoProps> = ({ children }) => {
     const [cadastro, setCadastro] = useState<CadastroLogin>();
     const [nome, setNome] = useState('');
     const [sobrenome, setSobrenome] = useState('');
-    const [telefone, setTelefone] = useState('');
+    const [telefone, setTelefone] = useState(0);
     const [email, setEmail] = useState('');
+    const [confimarEmail, setConfimarEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+
+
     const NovoCadastroLogin = async () => {
+        setLoading(true);
         if (!nome || !sobrenome || !telefone || !email || !password) {
             toast.warning('Preencha todos os campos');
             return;
         }
-    
+        if (email != confimarEmail) {
+            toast.warning('Email está diferente. Por favor corrija!')
+            return;
+        }
+
         const novoCadastro: CadastroLogin = {
             nome,
             sobreNome: sobrenome.trim(),
             telefone,
             email,
+            confirmarEmail: confimarEmail.trim(),
             senha: password.trim()
         };
-    
+
         try {
             setCadastro(novoCadastro);
-            console.log("Enviando cadastro:", novoCadastro);
             await CadastroLoginNovo(novoCadastro);
             toast.success("Cadastro realizado com sucesso!");
+            setLoading(false);
         } catch (error) {
             toast.error('Erro ao cadastrar. Verifique os dados e tente novamente.');
+            setLoading(false);
         }
     };
-    
+
     return (
 
         <>
@@ -51,28 +60,23 @@ const CadastroNovo: React.FC<CadastroNovoProps> = ({ children }) => {
                     minHeight: '100vh',
                     backgroundColor: '#f0f0f0',
                     flexDirection: 'column',
-                    padding: '1rem',
+                    padding: '0rem',
                 }}
             >
-                {/* Nome acima do card */}
-                <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                    <span style={{ color: 'black', fontSize: '1em' }}>{"<"}</span>
-                    <strong style={{ color: '#007bff', fontSize: '1.5em', margin: '0 0.3em' }}>Gustavo</strong>
-                    <span style={{ color: 'black', fontSize: '1em' }}>/&gt;</span>
-                </div>
 
-                {/* Card de login */}
+
                 <div
                     style={{
                         backgroundColor: 'white',
-                        padding: '1.5rem', /* Diminui um pouco o padding interno em telas menores */
+                        padding: '1.5rem',
                         borderRadius: '8px',
                         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                        width: '100%', /* O card ocupa 90% da largura */
-                        maxWidth: '400px', /* Largura máxima do card */
+                        width: '100%',
+                        maxWidth: '400px',
+
                     }}
                 >
-                    {/* Cabeçalho azul */}
+
                     <div
                         style={{
                             backgroundColor: '#00008B',
@@ -157,12 +161,14 @@ const CadastroNovo: React.FC<CadastroNovoProps> = ({ children }) => {
                                 border: '1px solid #ccc',
                                 borderRadius: '8px',
                                 fontSize: '0.9rem',
+                                appearance: 'textfield'
+
                             }}
                             id="telefone"
-                            type="telefone"
+                            type="number"
                             placeholder="Digite seu telefone"
                             value={telefone}
-                            onChange={(e) => setTelefone(e.target.value)}
+                            onChange={(e) => setTelefone(parseInt(e.target.value))}
                         />
                     </div>
                     <div style={{ marginBottom: '0.8rem' }}>
@@ -185,6 +191,28 @@ const CadastroNovo: React.FC<CadastroNovoProps> = ({ children }) => {
                             placeholder="Digite seu email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div style={{ marginBottom: '0.8rem' }}>
+                        <label
+                            style={{ display: 'block', marginBottom: '0.3rem', color: '#00008B', fontSize: '0.9rem' }}
+                            htmlFor="confimarEmail"
+                        >
+                            Confirma Email
+                        </label>
+                        <input
+                            style={{
+                                width: '100%',
+                                padding: '8px',
+                                border: '1px solid #ccc',
+                                borderRadius: '8px',
+                                fontSize: '0.9rem',
+                            }}
+                            id="confimarEmail"
+                            type="confimarEmail"
+                            placeholder="Digite seu email"
+                            value={confimarEmail}
+                            onChange={(e) => setConfimarEmail(e.target.value)}
                         />
                     </div>
 
@@ -219,12 +247,14 @@ const CadastroNovo: React.FC<CadastroNovoProps> = ({ children }) => {
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',
-                            cursor: 'pointer',
+                            cursor: loading ? 'not-allowed' : 'pointer',
                             fontSize: '1rem',
+                            opacity: loading ? 0.6 : 1,
                         }}
                         onClick={NovoCadastroLogin}
+                        disabled={loading}
                     >
-                        Entrar
+                        {loading ? 'Carregando...' : 'Entrar'}
                     </button>
 
                     <div style={{ textAlign: "center", marginTop: "15px", fontSize: "0.8rem" }}>

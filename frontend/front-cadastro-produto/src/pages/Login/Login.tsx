@@ -3,24 +3,29 @@ import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../api/Api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import CadastroNovo from './CadastroNovo';
+
 
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const handleLogin = async () => {
+        setLoading(true);
         if (!email || !password) {
             toast.warning('Preencha todos os campos');
             return;
         }
 
         try {
-            await login(email, password);
-            navigate('/home');
+            await login(email, password)
+            navigate('/CadastroProduto');
+            
+            setLoading(false);
         } catch (error) {
             toast.error('Usuário ou senha inválidos');
+            setLoading(false);
         }
     };
 
@@ -48,12 +53,14 @@ const LoginPage: React.FC = () => {
 
             {/* Card de login */}
             <div
-                style={{
+                 style={{
                     backgroundColor: 'white',
-                    padding: '2rem',
+                    padding: '1.25rem',
                     borderRadius: '8px',
                     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                     minWidth: '300px',
+                    maxWidth: '380px',
+                    width: '100%',
                 }}
             >
                 {/* Cabeçalho azul */}
@@ -64,8 +71,8 @@ const LoginPage: React.FC = () => {
                         marginBottom: '1.5rem',
                         textAlign: 'center',
                         padding: '0.5rem',
-                        marginLeft: '-2rem',
-                        marginRight: '-2rem',
+                        marginLeft: '-1.2rem',
+                        marginRight: '-1.2rem',
                         marginTop: '-2rem',
                         paddingTop: '1rem',
                     }}
@@ -73,7 +80,7 @@ const LoginPage: React.FC = () => {
                     <h2
                         style={{
                             color: 'white',
-                            margin: 0,
+                            marginTop: '1px',
                             fontSize: '1.5rem',
                         }}
                     >
@@ -131,7 +138,7 @@ const LoginPage: React.FC = () => {
                 </div>
 
                 <div style={{ textAlign: 'right', marginBottom: '1rem', fontSize: '0.9rem' }}>
-                    <a href="/forgot-password">Esqueceu a senha?</a>
+                    <Link to={'/esqueciSenha'}>Esqueceu a senha?</Link>
                 </div>
 
                 <button
@@ -146,8 +153,9 @@ const LoginPage: React.FC = () => {
                         fontSize: '1rem',
                     }}
                     onClick={handleLogin}
-                >
-                    Entrar
+                    disabled={loading}
+                    >
+                        {loading ? 'Carregando...' : 'Entrar'}
                 </button>
 
                 <div style={{ textAlign: "center", marginTop: "20px", fontSize: "14px" }}>
@@ -175,3 +183,7 @@ const LoginPage: React.FC = () => {
 };
 
 export default LoginPage;
+
+function BuscarNomePeloEmail(email: string) {
+    throw new Error('Function not implemented.');
+}
