@@ -45,11 +45,17 @@ public class Program
         // CORS
         builder.Services.AddCors(options => {
             options.AddPolicy("PermitirReact", policy => {
-                policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
-                      .AllowAnyHeader()
-                      .AllowAnyMethod();
+                policy.WithOrigins(
+                        "http://localhost:3000",
+                        "https://localhost:3000",
+                        "http://front-cadastro-pedido:3000",
+                        "https://front-cadastro-pedido:3000"
+                    )
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
             });
         });
+
 
         var app = builder.Build();
 

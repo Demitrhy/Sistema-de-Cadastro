@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import { Produto } from "../../interface/Produto";
 import React, { useEffect, useState } from 'react';
-import { BuscarProdutos, Editar } from "../../api/Api";
+import { BuscarProdutos, EditarProduto } from "../../api/Api";
 import 'font-awesome/css/font-awesome.min.css';
 import { Modal, Button, Form } from 'react-bootstrap';
 
@@ -79,7 +79,7 @@ const FormadorPreco: React.FC = () => {
 
         try {
      
-            await Editar(dadosAtualizados);
+            await EditarProduto(dadosAtualizados);
             toast.success('Produto salvo com sucesso!');
             carregarProdutos();
             handleFechar();

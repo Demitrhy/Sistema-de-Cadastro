@@ -2,6 +2,7 @@
 using LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio.Interface;
 using LOG_RT_DISTRIBUICAO_CORE.Interface.Service;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Crypto.Digests;
 
 namespace LOG_RT_DISTRIBUICAO_CORE.Controllers
 {
@@ -26,6 +27,19 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Controllers
         {
             var dados = _userRepository.BuscarUsuarioExistente();
             return dados;
+        }
+
+        [HttpPut("EditarUsuario")]
+        public async Task EditarUsuario([FromBody] UserDto dados)
+        {
+            try
+            {
+                await _userRepository.EditarUsuario(dados.Id, dados.Nome, dados.Sobrenome,dados.Telefone,dados.Email);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("Erro ao editar usuario");
+            }
         }
 
         [HttpPost("register")]

@@ -1,6 +1,6 @@
 ﻿namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio
 {
- // Contexto do seu DbContext
+    // Contexto do seu DbContext
     using Microsoft.EntityFrameworkCore;
     using System.Threading.Tasks;
     using global::LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio.Interface;
@@ -30,12 +30,32 @@
 
                     connection.Open();
 
-                    var buscar = connection.Query<UserDto>(ProdutoScript.BuscarDadosUsuario, null);
+                    var buscar = connection.Query<UserDto>(UsuarioScript.BuscarDadosUsuario, null);
                     connection.Close();
 
                     return buscar;
                 }
             }
+
+            public async Task EditarUsuario(int id, string nome, string sobrenome, long telefone, string email)
+            {
+                using (var connection = new System.Data.SqlClient.SqlConnection(_sqlConnection.ConnectionString))
+                {
+                    connection.Open();
+
+                    DynamicParameters dynamicParameters = new DynamicParameters();  
+                    dynamicParameters.Add("Id",id);    
+                    dynamicParameters.Add("Nome", nome);    
+                    dynamicParameters.Add("Sobrenome", sobrenome);    
+                    dynamicParameters.Add("Telefone",telefone);    
+                    dynamicParameters.Add("Email", email);
+
+                    await connection.ExecuteAsync(UsuarioScript.EditarUsuario, dynamicParameters);
+
+                    connection.Close();
+                }
+            }
+
             public async Task<UserDto> GetByEmailAsync(string email)
             {
                 return await _context.Usuario.FirstOrDefaultAsync(u => u.Email == email);
@@ -55,11 +75,13 @@
                 await _context.Usuario.AddAsync(user);
                 await _context.SaveChangesAsync();
             }
-         
+
         }
+
+
     }
 
-       
-        
+
+
 
 }

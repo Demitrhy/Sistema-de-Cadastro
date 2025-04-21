@@ -2,12 +2,7 @@
 {
     public class ProdutoScript
     {
-        public static string BuscarDadosUsuario => @"
-           SELECT Id,	Nome,	SobreNome,	Telefone,	Email
-             FROM USUARIO 
-            
-          ";
-
+      
         public static string BuscarProduto => @"
          SELECT
             PM_CD_PRODUTO as Produto

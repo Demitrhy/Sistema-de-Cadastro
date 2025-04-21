@@ -48,10 +48,10 @@ export async function Importar(produtos: Produto[]): Promise<void> {
   }
 }
 
-export async function Editar
+export async function EditarProduto
   (
     dados: {
-      produto:number | undefined;
+      produto: number | undefined;
       digito: number | undefined;
       liquido: number;
       comissao: number;
@@ -61,6 +61,23 @@ export async function Editar
     }): Promise<void> {
   try {
     await api.put('/Produto/Editar', dados
+    );
+  } catch (error) {
+    throw error;
+  }
+}
+export async function EditarUsuario(
+  dadosAtualizados: {
+    id: number | undefined;
+    nome: string;
+    sobrenome: string;
+    telefone: number;
+    email: string;
+    senha: string;
+  }): Promise<void> {
+  try {
+    console.log(dadosAtualizados)
+    await api.put('/Auth/EditarUsuario', dadosAtualizados
     );
   } catch (error) {
     throw error;
@@ -77,25 +94,26 @@ export async function BuscarProdutos(): Promise<Produto[]> {
   }
 }
 
+
 export async function enviarCodigoAPI(email: string | null, codigo: string): Promise<void> {
   try {
-      await api.post('/Codigo/enviarCodigo', {
-        email,
-        codigo: "0"
-      });
+    await api.post('/Codigo/enviarCodigo', {
+      email,
+      codigo: "0"
+    });
   } catch (error) {
     console.error("Erro ao enviar código:", error);
     throw error;
   }
 }
 
-export async function validarCodigoAPI(email: string | null, codigo: string| null): Promise<void> {
+export async function validarCodigoAPI(email: string | null, codigo: string | null): Promise<void> {
   try {
-    
-      await api.post('/Codigo/validarCodigo', {
-        email,
-        codigo
-      });
+
+    await api.post('/Codigo/validarCodigo', {
+      email,
+      codigo
+    });
   } catch (error) {
     console.error("Erro ao validar código:", error);
     throw error;
@@ -104,11 +122,11 @@ export async function validarCodigoAPI(email: string | null, codigo: string| nul
 
 export async function redefimirSenha(email: string | null, senha: string): Promise<void> {
   try {
-  
-      await api.post('/Codigo/redefimirSenha',{
-        email,
-        senha
-      } );
+
+    await api.post('/Codigo/redefimirSenha', {
+      email,
+      senha
+    });
   } catch (error) {
     console.error("Erro ao validar código:", error);
     throw error;
@@ -127,7 +145,6 @@ type Usuario = {
 export async function BuscarUsuario(): Promise<Usuario[]> {
   try {
     const response = await api.get<Usuario[]>('/Auth/BuscarUsuario');
-    console.log("passeii 1 vez aqui", response.data);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar produtos:", error);

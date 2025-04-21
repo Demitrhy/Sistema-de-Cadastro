@@ -16,10 +16,8 @@ const MeuPerfil: React.FC = () => {
         const carregarPerfil = async () => {
             try {
                 const data = await BuscarUsuario();
-                const usuario = data[0]; 
-    
-                console.log('Usuário carregado:', usuario);
-    
+                const usuario = data[0];
+
                 setPerfil({
                     id: usuario.id,
                     nome: usuario.nome,
@@ -27,7 +25,7 @@ const MeuPerfil: React.FC = () => {
                     telefone: usuario.telefone,
                     email: usuario.email,
                 });
-                
+
             } catch (error) {
                 console.error('Erro ao buscar perfil:', error);
             }
@@ -88,42 +86,42 @@ const MeuPerfil: React.FC = () => {
                     {/* Formulário */}
                     <div style={{ marginBottom: '0.8rem' }}>
                         <label style={{ display: 'flex', justifyContent: 'space-between', color: '#00008B', fontSize: '0.9rem' }}>
-                            <span>Id: {perfil.id}</span>
+                            <span>Id: <span style={{ color: 'black' }}>{perfil.id}</span></span>
                         </label>
                     </div>
                     <div style={{ height: '1px', backgroundColor: '#ddd', margin: '4px 0' }} />
 
                     <div style={{ marginBottom: '0.8rem' }}>
                         <label style={{ display: 'flex', justifyContent: 'space-between', color: '#00008B', fontSize: '0.9rem' }}>
-                            <span>Nome: {perfil.nome}</span>
+                            <span>Nome:  <span style={{ color: 'black' }}>{perfil.nome}</span></span>
                         </label>
                     </div>
                     <div style={{ height: '1px', backgroundColor: '#ddd', margin: '4px 0' }} />
 
                     <div style={{ marginBottom: '0.8rem' }}>
                         <label style={{ display: 'flex', justifyContent: 'space-between', color: '#00008B', fontSize: '0.9rem' }}>
-                            <span>Sobrenome:{perfil.sobrenome} </span>
-                        
+                            <span>Sobrenome: <span style={{ color: 'black' }}>{perfil.sobrenome} </span></span>
+
                         </label>
                     </div>
                     <div style={{ height: '1px', backgroundColor: '#ddd', margin: '4px 0' }} />
 
                     <div style={{ marginBottom: '0.8rem' }}>
                         <label style={{ display: 'flex', justifyContent: 'space-between', color: '#00008B', fontSize: '0.9rem' }}>
-                            <span>Telefone: {perfil.telefone}</span>
-                            
+                            <span>Telefone:  <span style={{ color: 'black' }}>{perfil.telefone}</span></span>
+
                         </label>
                     </div>
                     <div style={{ height: '1px', backgroundColor: '#ddd', margin: '4px 0' }} />
 
                     <div style={{ marginBottom: '0.8rem' }}>
                         <label style={{ display: 'flex', justifyContent: 'space-between', color: '#00008B', fontSize: '0.9rem' }}>
-                            <span>Email: {perfil.email}</span>
-                           
+                            <span>Email: <span style={{ color: 'black' }}>{perfil.email}</span></span>
+
                         </label>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 

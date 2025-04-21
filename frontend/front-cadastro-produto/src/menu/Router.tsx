@@ -9,10 +9,12 @@ import CadastroNovo from '../pages/Login/CadastroNovo';
 import EsqueciSenha from '../pages/Login/EsqueciSenha';
 import VerificarCodigo from '../pages/Login/VerificarCodigo';
 import RedefinirSenha from '../pages/Login/RedefinirSenha';
+import EditarMeuPerfil from '../pages/Login/EditarMeuPerfil';
 
 
 const Home: React.FC = () => {
-  const [pagina, setPagina] = useState<'individual' | 'perfil'>('individual');
+  const [pagina, setPagina] = useState<'individual' | 'perfil' | 'edit'>('individual');
+
   const [dropdownAberto, setDropdownAberto] = useState(false);
   const [menuUsuarioAberto, setMenuUsuarioAberto] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -24,15 +26,18 @@ const Home: React.FC = () => {
         return <CadastroIndividual />;
       case 'perfil':
         return <MeuPerfil />;
+      case 'edit':
+        return <EditarMeuPerfil />;
       default:
         return null;
     }
   };
 
+
   const Sair = () => {
     navigate('/login')
-  } 
- 
+  }
+
 
   // Fecha o dropdown do usuário ao clicar fora
   useEffect(() => {
@@ -178,6 +183,26 @@ const Home: React.FC = () => {
                 backgroundColor: '#ddd',
                 margin: '4px 0'
               }} />
+              <div
+                onClick={() => {
+                  setPagina('edit');
+                  setDropdownAberto(false);
+                }}
+                style={{
+                  width: '100%',
+                  padding: '10px 16px',
+                  textAlign: 'left',
+                  border: 'none',
+                  background: 'none',
+                  cursor: 'pointer', color:"white"}}
+              >
+              Editar Perfil
+              </div>
+              <div style={{
+                height: '1px',
+                backgroundColor: '#ddd',
+                margin: '4px 0'
+              }} />
               <button
                 onClick={Sair}
                 style={{
@@ -214,6 +239,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/redefinirSenha" element={<RedefinirSenha />} />
       <Route path="/cadastro" element={<CadastroNovo children={undefined} />} />
       <Route path="/meuPerfil" element={<CadastroNovo children={undefined} />} />
+      <Route path="/editarMeuPerfil" element={<EditarMeuPerfil />} />
       <Route
         path="/CadastroProduto"
         element={
