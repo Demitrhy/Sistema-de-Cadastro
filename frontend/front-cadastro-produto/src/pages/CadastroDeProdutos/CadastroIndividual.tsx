@@ -90,10 +90,10 @@ const CadastroIndividual: React.FC = () => {
             };
     
             setPlanilha((prev) => [...prev, novoItem]);
-            toast.success('✅ Produto adicionado à tabela!');
+            toast.success('Produto adicionado à tabela!');
             limparCampos();
         } else {
-            toast.error("❌ Preencha todos os campos obrigatórios antes de adicionar o produto.");
+            toast.error(" Preencha todos os campos obrigatórios antes de adicionar o produto.");
         }
     };
     
@@ -105,10 +105,10 @@ const CadastroIndividual: React.FC = () => {
         try {
            
             await Importar(planilha);
-            toast.success('✅ Produto importado com sucesso!');
+            toast.success(' Produto importado com sucesso!');
             setPlanilha([]);
         } catch (erro) {
-            toast.error('❌ Erro ao importar o produto.');
+            toast.error(' Erro ao importar o produto.');
             console.error(erro);
         } finally {
             setLoading(false);
@@ -122,7 +122,7 @@ const CadastroIndividual: React.FC = () => {
             padding: '30px',
             fontFamily: 'sans-serif',
         }}>
-            <h2 style={{ fontSize: '18px', marginBottom: '20px', color: '#003865' }}>CADASTRO DE PRODUTO OU SERVIÇO</h2>
+            <h2 style={{ fontSize: '18px', marginBottom: '20px', color: '#003865' }}>CADASTRO DE PRODUTO </h2>
 
             {/* Tabs */}
             <div style={{ borderBottom: '1px solid #ccc', marginBottom: '20px' }}>

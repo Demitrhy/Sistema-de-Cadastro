@@ -247,6 +247,21 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio
 
                 connection.Close();
             }
+        }  
+        public async Task ExcluirProduto(int produto, int digito)
+        {
+            using (var connection = new SqlConnection(_sqlConnection.ConnectionString))
+            {
+                connection.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("Produto", produto);
+                parameters.Add("Digito", digito);
+
+                await connection.ExecuteAsync(ProdutoScript.Excluir, parameters);
+
+                connection.Close();
+            }
         }
 
     }

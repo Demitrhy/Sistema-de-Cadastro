@@ -47,10 +47,9 @@ const RedefinirSenha = () => {
                     <label style={{ display: 'block', marginBottom: '0.5rem', color: '#333', fontWeight: 'bold' }}>
                         Senha
                         <input
-                            type="text"
+                           type="password"
                             value={senha}
                             onChange={(e) => setSenha(e.target.value)}
-
                             placeholder="Digite a senha"
                             style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc', outline: 'none' }}
                         />
@@ -61,14 +60,13 @@ const RedefinirSenha = () => {
                     <label style={{ display: 'block', marginBottom: '0.5rem', color: '#333', fontWeight: 'bold' }}>
                         Confirma Senha
                         <input
-                            type="text"
+                            type="password"
                             value={confirmarSenha}
                             onChange={(e) => setConfirmarSenha(e.target.value)}
                             placeholder="confirme a senha"
                             style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc', outline: 'none' }}
                         />
                     </label>
-
                 </div>
 
                 <div style={{ marginBottom: '1rem' }}>

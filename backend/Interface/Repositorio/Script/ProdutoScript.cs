@@ -141,7 +141,11 @@
           AND PM_CD_DIGITO = @Digito"
         ;
 
-        
+        public static string Excluir => @"
+            DELETE PRODUTO_MESTRE 
+             WHERE PM_CD_PRODUTO = @Produto 
+                   AND PM_CD_DIGITO = @Digito
+            ";
 
     }
 

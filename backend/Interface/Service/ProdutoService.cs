@@ -118,6 +118,17 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Service
             {
                 throw new ArgumentException("Algo deu errado ao editar o produto");
             }
+        }  
+        public async Task ExcluirProduto(int produto, int digito)
+        {
+            try
+            {
+                await _produtoRepositorio.ExcluirProduto(produto, digito );
+            }
+            catch (ArgumentException e)
+            {
+                throw new ArgumentException("Algo deu errado ao excluir o produto");
+            }
         }
 
 

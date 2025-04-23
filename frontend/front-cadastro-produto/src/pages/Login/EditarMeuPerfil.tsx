@@ -11,7 +11,7 @@ const EditarMeuPerfil: React.FC = () => {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [editar, setEditar] = useState<Usuario | null>(null);
-
+ 
     useEffect(() => {
         if (editar) {
             setNome(editar.nome ?? "");

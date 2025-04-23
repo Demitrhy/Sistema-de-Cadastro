@@ -138,7 +138,7 @@ const EsqueciSenha: React.FC<Props> = ({ onSuccess }) => {
                     onClick={handleEnviarCodigo}
                     disabled={enviando}
                 >
-                    Enviar código
+                 
                     {enviando ? "Enviando código..." : "Enviar código"}
                 </button>
             </div>

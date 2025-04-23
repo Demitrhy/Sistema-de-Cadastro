@@ -66,6 +66,23 @@ export async function EditarProduto
     throw error;
   }
 }
+
+export async function ExcluirProduto
+  (
+    dados: {
+      produto: number | undefined;
+      digito: number | undefined;
+    }): Promise<void> {
+  try {
+    console.log("passei por aqui",dados)
+    await api.delete('/Produto/Excluir',  {
+      data: dados
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function EditarUsuario(
   dadosAtualizados: {
     id: number | undefined;

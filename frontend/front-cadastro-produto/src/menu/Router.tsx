@@ -194,7 +194,7 @@ const Home: React.FC = () => {
                   textAlign: 'left',
                   border: 'none',
                   background: 'none',
-                  cursor: 'pointer', color:"white"}}
+                  cursor: 'pointer'}}
               >
               Editar Perfil
               </div>
@@ -238,7 +238,6 @@ const AppRoutes: React.FC = () => {
       <Route path="/verificarCodigo" element={<VerificarCodigo />} />
       <Route path="/redefinirSenha" element={<RedefinirSenha />} />
       <Route path="/cadastro" element={<CadastroNovo children={undefined} />} />
-      <Route path="/meuPerfil" element={<CadastroNovo children={undefined} />} />
       <Route path="/editarMeuPerfil" element={<EditarMeuPerfil />} />
       <Route
         path="/CadastroProduto"

@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import { Produto } from "../../interface/Produto";
 import React, { useEffect, useState } from 'react';
-import { BuscarProdutos, EditarProduto } from "../../api/Api";
+import { BuscarProdutos, EditarProduto, ExcluirProduto } from "../../api/Api";
 import 'font-awesome/css/font-awesome.min.css';
 import { Modal, Button, Form } from 'react-bootstrap';
 
@@ -9,12 +9,14 @@ const FormadorPreco: React.FC = () => {
     const [planilha, setPlanilha] = useState<Array<Produto>>([]);
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [modal, setModal] = useState(false);
     const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
     const [custo, setCusto] = useState(0);
     const [percLucro, setPercentualLucro] = useState(0);
     const [precoVenda, setPrecoVenda] = useState(0);
     const [comissao, setComissao] = useState(0);
     const [liquido, setLiquido] = useState(0);
+
 
     useEffect(() => {
         const preco = custo + (custo * percLucro / 100);
@@ -39,8 +41,14 @@ const FormadorPreco: React.FC = () => {
         setLoading(true);
         try {
             const resultado = await BuscarProdutos();
-            toast.success('Busca feita com  sucesso!');
-            setPlanilha(resultado);
+            
+            if (resultado.length == 0) {
+                toast.warning("Não existe produto cadastrado");
+            }
+            else {
+                toast.success('Busca feita com  sucesso!');
+                setPlanilha(resultado);
+            }
         } catch (erro) {
             toast.error('Falha na busca dos produtos.');
             console.error(erro);
@@ -52,6 +60,16 @@ const FormadorPreco: React.FC = () => {
     useEffect(() => {
         carregarProdutos();
     }, []);
+
+
+    const excluir = (produto: Produto) => {
+        setProdutoSelecionado(produto);
+        setModal(true);
+    }
+    const fechar = () => {
+        setModal(false);
+        setProdutoSelecionado(null);
+    }
 
 
 
@@ -67,6 +85,7 @@ const FormadorPreco: React.FC = () => {
     };
 
     const Salvar = async () => {
+        setLoading(true);
         const dadosAtualizados = {
             produto: produtoSelecionado?.produto,
             digito: produtoSelecionado?.digito,
@@ -78,7 +97,7 @@ const FormadorPreco: React.FC = () => {
         };
 
         try {
-     
+
             await EditarProduto(dadosAtualizados);
             toast.success('Produto salvo com sucesso!');
             carregarProdutos();
@@ -89,12 +108,33 @@ const FormadorPreco: React.FC = () => {
         }
     };
 
+    const Excluir = async () => {
+        setLoading(true);
+        const dadosAtualizados = {
+            produto: produtoSelecionado?.produto,
+            digito: produtoSelecionado?.digito,
+        };
+
+        try {
+
+            await ExcluirProduto(dadosAtualizados);
+            toast.success('Produto exluido com sucesso!');
+            carregarProdutos();
+            setLoading(false);
+            fechar();
+        } catch (error) {
+            toast.error('Erro ao exluido o produto');
+            console.error(error);
+
+        }
+    };
+
     return (
         <>
             <div>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
-                        <tr style={{ backgroundColor: '#0d6efd', color: '#ffffff' }}>
+                        <tr style={{ backgroundColor: '#0d6efd', borderSpacing: '10px 0', color: '#ffffff' }}>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Produto</th>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Nome</th>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Marca</th>
@@ -133,11 +173,25 @@ const FormadorPreco: React.FC = () => {
                                             border: 'none',
                                             borderRadius: '6px',
                                             color: 'white',
-                                            fontWeight: 'bold'
+                                            fontWeight: 'bold',
+                                            marginRight: '15px'
                                         }}
                                         onClick={() => handleEditar(item)}
                                     >
                                         <i className="fa fa-pencil" /> {/* Ícone de lápis para editar */}
+                                    </button>
+                                    <button
+                                        style={{
+                                            padding: '5px 10px',
+                                            backgroundColor: 'red',
+                                            border: 'none',
+                                            borderRadius: '6px',
+                                            color: 'white',
+                                            fontWeight: 'bold'
+                                        }}
+                                        onClick={() => excluir(item)}
+                                    >
+                                        <i className="fa fa-trash" />
                                     </button>
                                 </td>
                             </tr>
@@ -153,20 +207,24 @@ const FormadorPreco: React.FC = () => {
                         <Modal.Title>Editar Produto</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <div style={{ backgroundColor: '#1c1c1c', padding: '20px', borderRadius: '10px' }}>
+                        <div style={{
+                            backgroundColor: "#f2f2f2", /* ou blackfff para branco puro */
+                            color: "black",
+                            padding: '20px', borderRadius: '10px'
+                        }}>
                             {/* Primeira linha */}
                             <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
                                 <div style={{ flex: 1 }} aria-disabled>
-                                    <label style={{ color: '#fff' }}>Código</label>
+                                    <label style={{ color: 'black' }}>Código</label>
 
                                     <Form.Control disabled defaultValue={produtoSelecionado.produto} />
                                 </div>
                                 <div style={{ flex: 1 }}>
-                                    <label style={{ color: '#fff' }}>Tipo</label>
+                                    <label style={{ color: 'black' }}>Tipo</label>
                                     <Form.Control disabled defaultValue={produtoSelecionado.tipo} />
                                 </div>
                                 <div style={{ flex: 2 }}>
-                                    <label style={{ color: '#fff' }}>Nome</label>
+                                    <label style={{ color: 'black' }}>Nome</label>
                                     <Form.Control disabled defaultValue={produtoSelecionado.nome} />
                                 </div>
                             </div>
@@ -174,16 +232,16 @@ const FormadorPreco: React.FC = () => {
                             {/* Segunda linha */}
                             <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
                                 <div style={{ flex: 1 }}>
-                                    <label style={{ color: '#fff' }}>Grupo</label>
+                                    <label style={{ color: 'black' }}>Grupo</label>
                                     <Form.Control disabled defaultValue={produtoSelecionado.grupo} />
 
                                 </div>
                                 <div style={{ flex: 2 }}>
-                                    <label style={{ color: '#fff' }}>Marca</label>
+                                    <label style={{ color: 'black' }}>Marca</label>
                                     <Form.Control disabled defaultValue={produtoSelecionado.marca} />
                                 </div>
                                 <div style={{ flex: 1 }}>
-                                    <label style={{ color: '#fff' }}>Unidade Medida</label>
+                                    <label style={{ color: 'black' }}>Unidade Medida</label>
                                     <Form.Control disabled defaultValue={produtoSelecionado.unidadeMedida} />
                                 </div>
                             </div>
@@ -191,11 +249,11 @@ const FormadorPreco: React.FC = () => {
                             {/* Terceira linha */}
                             <div style={{ display: 'flex', gap: '10px' }}>
                                 <div style={{ flex: 1 }}>
-                                    <label style={{ color: '#fff' }}>Status</label>
+                                    <label style={{ color: 'black' }}>Status</label>
                                     <Form.Control disabled defaultValue={produtoSelecionado.situacao} />
                                 </div>
                                 <div style={{ flex: 1 }}>
-                                    <label style={{ color: '#fff' }}>Custo</label>
+                                    <label style={{ color: 'black' }}>Custo</label>
                                     <Form.Control
                                         value={custo}
                                         type="number"
@@ -204,22 +262,22 @@ const FormadorPreco: React.FC = () => {
                                         min={1} />
                                 </div>
                                 <div style={{ flex: 1 }}>
-                                    <label style={{ color: '#fff' }}>Perc. de Lucro (%)</label>
+                                    <label style={{ color: 'black' }}>Perc. Lucro(%)</label>
                                     <Form.Control value={percLucro} type="number" style={{ appearance: 'textfield' }}
                                         onChange={(e) => setPercentualLucro(parseInt(e.target.value))} />
                                 </div>
                                 <div style={{ flex: 1 }}>
-                                    <label style={{ color: '#fff' }}>Preço Venda (R$)</label>
+                                    <label style={{ color: 'black' }}>Pre. Venda(R$)</label>
                                     <Form.Control value={precoVenda} type="number" style={{ appearance: 'textfield' }}
                                         onChange={(e) => setPrecoVenda(parseInt(e.target.value))} />
                                 </div>
                                 <div style={{ flex: 1 }}>
-                                    <label style={{ color: '#fff' }}>Comissão (%)</label>
+                                    <label style={{ color: 'black' }}>Comissão(%)</label>
                                     <Form.Control value={comissao} type="number" style={{ appearance: 'textfield' }}
                                         onChange={(e) => setComissao(parseInt(e.target.value))} />
                                 </div>
                                 <div style={{ flex: 1 }}>
-                                    <label style={{ color: '#fff' }}>Líquido (R$)</label>
+                                    <label style={{ color: 'black' }}>Líquido(R$)</label>
                                     <Form.Control value={liquido} type="number" style={{ appearance: 'textfield' }}
                                         onChange={(e) => setLiquido(parseInt(e.target.value))} />
                                 </div>
@@ -238,10 +296,65 @@ const FormadorPreco: React.FC = () => {
                                 color: 'white',
                                 fontWeight: 'bold'
                             }}
+                            disabled={loading}
                         >
-                            Salvar
+                            {loading ? 'Salvando...' : 'Salvar'}
                         </Button>
                         <Button onClick={handleFechar}
+                            style={{
+                                padding: '10px 20px',
+                                backgroundColor: '#dc3545 ',
+                                border: 'none',
+                                borderRadius: '6px',
+                                color: 'white',
+                                fontWeight: 'bold'
+                            }}>
+
+                            Fechar
+                        </Button>
+                    </Modal.Footer>
+                </Modal >
+            )}
+            {produtoSelecionado && (
+                <Modal show={modal} onHide={fechar} size="lg" centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Tem certeza que deseja excluir esse produto ?</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                            <div style={{ flex: 1 }} aria-disabled>
+                                <label style={{ color: 'black' }}>Código</label>
+
+                                <Form.Control disabled defaultValue={produtoSelecionado.produto} />
+                            </div>
+                            <div style={{ flex: 2 }}>
+                                <label style={{ color: 'black' }}>Nome</label>
+                                <Form.Control disabled defaultValue={produtoSelecionado.nome} />
+                            </div>
+                            <div style={{ flex: 2 }}>
+                                <label style={{ color: 'black' }}>Marca</label>
+                                <Form.Control disabled defaultValue={produtoSelecionado.marca} />
+                            </div>
+                        </div>
+
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button
+                            onClick={Excluir}
+                            style={{
+                                padding: '10px 20px',
+                                backgroundColor: '#007bff',
+                                border: 'none',
+                                borderRadius: '6px',
+                                color: 'white',
+                                fontWeight: 'bold'
+                            }}
+                            disabled={loading}
+                        >
+                            {loading ? 'Excluindo...' : 'Excluir'}
+                        </Button>
+                        <Button onClick={fechar}
                             style={{
                                 padding: '10px 20px',
                                 backgroundColor: '#dc3545 ',

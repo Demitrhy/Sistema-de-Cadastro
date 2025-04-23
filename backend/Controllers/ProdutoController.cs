@@ -70,6 +70,18 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Controllers
                 throw new ArgumentException(ex.Message);
             }
         }
+        [HttpDelete("Excluir")]
+        public async Task ExcluirProduto(ExclusaoDto dados)
+        {
+            try
+            {
+                await _produto.ExcluirProduto(dados.Produto, dados.Digito);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+        }
 
 
 
