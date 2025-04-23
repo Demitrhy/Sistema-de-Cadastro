@@ -1,13 +1,24 @@
-﻿namespace LOG_RT_DISTRIBUICAO_CORE.Dto
-{
-    public class ProdutoDto
-    {
+﻿namespace LOG_RT_DISTRIBUICAO_CORE.Dto {
+    public class ProdutoDto {
         public int Produto { get; set; }
         public int Digito { get; set; }
-        public string? Descricao { get; set; }
-        public string? Categoria { get; set; }
+        public string? Nome { get; set; }
+        public string? Tipo { get; set; }
         public DateTime Data_Hora_Cadastro { get; set; }
         public string? Situacao { get; set; }
+        public string? Grupo { get; set; }
+        public string? Marca { get; set; }
+        public string? UnidadeMedida { get; set; }
+        public decimal? Custo { get; set; }
+        public decimal? PercLucro { get; set; }
+        public decimal? PrecoVenda { get; set; }
+        public decimal? Comissao { get; set; }
+        public decimal? Liquido { get; set; }
+        public int? Id_Grupo { get; set; }
+        public int? Id_Tipo { get; set; }
+        public int? Id_Unidade { get; set; }
+        public bool? codigoBloqueado { get; set; }
+
 
     }
 }

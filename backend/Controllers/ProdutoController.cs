@@ -1,57 +1,89 @@
 using LOG_RT_DISTRIBUICAO_CORE.Dto;
-using LOG_RT_DISTRIBUICAO_CORE.Interface;
+using LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LOG_RT_DISTRIBUICAO_CORE.Controllers
 {
     [ApiController]
-    [Route("Produtos")]
-    public class ProdutoController : ControllerBase {
+    [Route("api/[controller]")]
+    public class ProdutoController : ControllerBase
+    {
 
-        private readonly IProdutoService _produto; 
+        private readonly IProdutoService _produto;
 
-        public ProdutoController(IProdutoService produto) {
+        public ProdutoController(IProdutoService produto)
+        {
             _produto = produto;
         }
 
 
         [HttpGet("BuscarProdutos")]
-        public IEnumerable<ProdutoDto> BuscarProduto(int codigo) {
+        public IEnumerable<ProdutoDto> BuscarProduto(int codigo)
+        {
 
             var produto = _produto.BuscarProduto(codigo);
             return produto;
         }
 
-        [HttpPost("InserirNovoProduto")]
-        public async Task InserirNovoProduto(int produto, string? descricao, string? categoria)
+        [HttpGet("BuscarProdutosExistente")]
+        public IEnumerable<ProdutoDto> BuscarProdutos()
         {
-            try {
-                await _produto.AdicionarNovoProduto(produto,descricao,categoria);
+
+            var produto = _produto.BuscarProdutos();
+            return produto;
+        }
+
+        [HttpPost("Importar")]
+        public async Task InserirNovoProduto([FromBody] List<ProdutoDto> produto)
+        {
+            try
+            {
+                await _produto.AdicionarNovoProduto(produto);
             }
-            catch (Exception ex )
+            catch (Exception ex)
             {
                 throw new ArgumentException(ex.Message);
-            }   
+            }
         }
+
         [HttpPut("MudarStatusProduto")]
-        public async Task MudarStatusProduto(List<ProdutoDto> produto,  string situacao) {
-            try 
+        public async Task MudarStatusProduto(List<ProdutoDto> produto, string situacao)
+        {
+            try
             {
                 await _produto.MudarNovoProduto(produto, situacao);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 throw new ArgumentException(ex.Message);
             }
         }
-        [HttpDelete("DeletarProduto")]
-        public async Task DeletarProduto (ProdutoDto produto) {
-            try {
-                await _produto.DeletarProduto(produto);
+        [HttpPut("Editar")]
+        public async Task EditarProduto(ProdutoDto produtos)
+        {
+            try
+            {
+                await _produto.MudarProduto(produtos.Produto, produtos.Digito, produtos.Liquido, produtos.Comissao ,produtos.PrecoVenda,produtos.PercLucro,produtos.Custo);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 throw new ArgumentException(ex.Message);
             }
         }
+        [HttpDelete("Excluir")]
+        public async Task ExcluirProduto(ExclusaoDto dados)
+        {
+            try
+            {
+                await _produto.ExcluirProduto(dados.Produto, dados.Digito);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+        }
+
+
 
 
     }
