@@ -38,7 +38,7 @@ const EditarMeuPerfil: React.FC = () => {
             });
         } catch (erro) {
             toast.error('Falha na busca o usuario.');
-            console.error(erro);
+          
         } finally {
             setLoading(false);
         }
@@ -65,7 +65,7 @@ const EditarMeuPerfil: React.FC = () => {
             carregarProdutos();
         } catch (error) {
             toast.error('Erro ao salvar o Usuario');
-            console.error(error);
+           
         }
     }
 

@@ -18,7 +18,7 @@
         public int? Id_Tipo { get; set; }
         public int? Id_Unidade { get; set; }
         public bool? codigoBloqueado { get; set; }
-
+        public int Fornecedor { get; set; } 
 
     }
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CadastroLogin } from "../../interface/Produto";
+import { CadastroLogin } from "../../interface/User";
 import { toast } from "react-toastify";
 import { CadastroLoginNovo } from "../../api/Api";
 import { Link } from "react-router-dom";

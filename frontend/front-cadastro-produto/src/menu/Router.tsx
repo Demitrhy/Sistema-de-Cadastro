@@ -1,235 +1,197 @@
-// Menu.tsx
-import React, { useState, useEffect, useRef } from 'react';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import React, { ElementType, useState } from 'react';
+import {
+  Box,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Button,
+  Avatar,
+  Divider,
+  Icon,
+} from '@chakra-ui/react';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+import { FaBoxes, FaTruck, FaWarehouse, FaChartBar, FaClipboardList } from 'react-icons/fa';
 import CadastroIndividual from '../pages/CadastroDeProdutos/CadastroIndividual';
 import MeuPerfil from '../pages/Login/MeuPerfil';
+import EditarMeuPerfil from '../pages/Login/EditarMeuPerfil';
+import CadastroDeFornecedor from '../pages/Fornecedor/CadastroDeFornecedor';
+import Relatorio from '../pages/Relatórios/relatorio';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import CadastroDeposito from '../pages/Deposito/CadastroDeposito';
 import Login from '../pages/Login/Login';
-import { PrivateRoute } from '../components/PrivateRoute';
-import CadastroNovo from '../pages/Login/CadastroNovo';
 import EsqueciSenha from '../pages/Login/EsqueciSenha';
 import VerificarCodigo from '../pages/Login/VerificarCodigo';
 import RedefinirSenha from '../pages/Login/RedefinirSenha';
-import EditarMeuPerfil from '../pages/Login/EditarMeuPerfil';
+import CadastroNovo from '../pages/Login/CadastroNovo';
+import { PrivateRoute } from '../components/PrivateRoute';
+import ProdutoDeposito from '../pages/ControleDeProduto/ProdutoDeposito';
 
-
-const Home: React.FC = () => {
-  const [pagina, setPagina] = useState<'individual' | 'perfil' | 'edit'>('individual');
-
-  const [dropdownAberto, setDropdownAberto] = useState(false);
-  const [menuUsuarioAberto, setMenuUsuarioAberto] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+const Router: React.FC = () => {
+  const [pagina, setPagina] = useState<'home' | 'individual' | 'produtoDeposito' | 'perfil' | 'edit' | 'fornecedor' | 'deposito' | 'relatorio'>('home');
   const navigate = useNavigate();
 
   const renderConteudo = () => {
     switch (pagina) {
-      case 'individual':
-        return <CadastroIndividual />;
-      case 'perfil':
-        return <MeuPerfil />;
-      case 'edit':
-        return <EditarMeuPerfil />;
-      default:
-        return null;
+      case 'individual': return <CadastroIndividual />;
+      case 'fornecedor': return <CadastroDeFornecedor />;
+      case 'deposito': return <CadastroDeposito />;
+      case 'produtoDeposito': return <ProdutoDeposito />;
+      case 'perfil': return <MeuPerfil />;
+      case 'relatorio': return <Relatorio />;
+      case 'edit': return <EditarMeuPerfil />;
+      default: return null;
     }
   };
+  
 
-
-  const Sair = () => {
-    navigate('/login')
-  }
-
-
-  // Fecha o dropdown do usuário ao clicar fora
-  useEffect(() => {
-    const handleClickFora = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setMenuUsuarioAberto(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickFora);
-    return () => document.removeEventListener('mousedown', handleClickFora);
-  }, []);
+  const Sair = () => navigate('/login');
 
   return (
-    <div style={{ fontFamily: 'sans-serif', height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Flex direction="column" height="100vh" fontFamily="sans-serif">
       {/* TopBar */}
-      <header style={{
-        display: 'flex',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        padding: '12px 20px',
-        borderBottom: '2px solid #e0e0e0',
-        boxShadow: '0px 2px 4px rgba(0,0,0,0.05)',
-        position: 'relative'
-      }}>
-        {/* Lado esquerdo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#003366' }}>
-            {"<Gustavo/>"}
-          </div>
+      <Flex
+        as="header"
+        align="center"
+        bg="blue.50"
+        px={6}
+        py={3}
+        borderBottom="2px solid"
+        borderColor="gray.200"
+        boxShadow="sm"
+        zIndex={100}
+      >
+        {/* Logo */}
+     
+        <Box
+          fontWeight="bold"
+          fontSize="xl"
+          color="blue.800"
+          mr={8}
+          cursor="pointer"
+          onClick={() => setPagina('home')}
+        >
+          {"<Gustavo/>"}
+        </Box>
 
-          {/* Dropdown Produto */}
-          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', marginLeft: '40px' }}>
-            <button
-              onClick={() => setDropdownAberto(!dropdownAberto)}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                color: '#003366',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}
+        {/* Menus */}
+        <Flex gap={6}>
+          <Menu>
+            <MenuButton
+              as={Button}
+              leftIcon={<Icon as={FaBoxes as ElementType} />} 
+              variant="ghost"
+              fontWeight="bold"
+              color="blue.800"
+              rightIcon={<ChevronDownIcon />}
             >
               Produto
-              <span style={{ transform: dropdownAberto ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
-                ▼
-              </span>
-            </button>
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={() => setPagina('individual')}>Cadastro Produto</MenuItem>
+            </MenuList>
+          </Menu>
 
-            {dropdownAberto && (
-              <div style={{
-                position: 'absolute',
-                top: '40px',
-                left: '0',
-                backgroundColor: '#fff',
-                borderRadius: '8px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                padding: '8px 0',
-                minWidth: '220px',
-                marginLeft: '-45px',
-                zIndex: 10,
-              }}>
-                <div
-                  onClick={() => {
-                    setPagina('individual');
-                    setDropdownAberto(false);
-                  }}
-                  style={{
-                    padding: '12px 20px',
-                    cursor: 'pointer',
-                    whiteSpace: 'nowrap',
-                    fontWeight: pagina === 'individual' ? 'bold' : 'normal',
-                    color: '#003366',
-                    transition: 'background-color 0.2s',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f5f5f5')}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-                >
-                  Cadastro Individual
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Lado direito - Avatar e menu do usuário */}
-        <div style={{ marginLeft: 'auto', position: 'relative' }} ref={menuRef}>
-          <div
-            style={{
-              backgroundColor: '#003366',
-              color: 'white',
-              borderRadius: '50%',
-              width: '32px',
-              height: '32px',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              fontWeight: 'bold',
-              cursor: 'pointer'
-            }}
-            onClick={() => setMenuUsuarioAberto(!menuUsuarioAberto)}
-          >
-            G
-          </div>
-
-          {menuUsuarioAberto && (
-            <div
-              style={{
-                position: 'absolute',
-                top: '40px',
-                right: 0,
-                backgroundColor: 'white',
-                border: '1px solid #ddd',
-                borderRadius: '8px',
-                boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-                minWidth: '160px',
-                zIndex: 1000,
-                padding: '8px 0'
-              }}
+          <Menu>
+            <MenuButton
+              as={Button}
+              variant="ghost"
+               leftIcon={<Icon as={FaTruck as ElementType} />}
+              fontWeight="bold"
+              color="blue.800"
+              rightIcon={<ChevronDownIcon />}
             >
-              <button
-                onClick={() => {
-                  setPagina('perfil');
-                  setMenuUsuarioAberto(false);
-                }}
-                style={{
-                  width: '100%',
-                  padding: '10px 16px',
-                  textAlign: 'left',
-                  border: 'none',
-                  background: 'none',
-                  cursor: 'pointer'
-                }}
-              >
-                Meu perfil
-              </button>
-              <div style={{
-                height: '1px',
-                backgroundColor: '#ddd',
-                margin: '4px 0'
-              }} />
-              <div
-                onClick={() => {
-                  setPagina('edit');
-                  setDropdownAberto(false);
-                }}
-                style={{
-                  width: '100%',
-                  padding: '10px 16px',
-                  textAlign: 'left',
-                  border: 'none',
-                  background: 'none',
-                  cursor: 'pointer'}}
-              >
-              Editar Perfil
-              </div>
-              <div style={{
-                height: '1px',
-                backgroundColor: '#ddd',
-                margin: '4px 0'
-              }} />
-              <button
-                onClick={Sair}
-                style={{
-                  width: '100%',
-                  padding: '10px 16px',
-                  textAlign: 'left',
-                  border: 'none',
-                  background: 'none',
-                  cursor: 'pointer'
-                }}
-              >
-                Sair
-              </button>
-            </div>
-          )}
-        </div>
-      </header>
+              Fornecedor
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={() => setPagina('fornecedor')}>Cadastro Fornecedor</MenuItem>
+            </MenuList>
+          </Menu>
 
-      {/* Conteúdo da página */}
-      <main style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
+          <Menu>
+            <MenuButton
+              as={Button}
+              variant="ghost"
+              fontWeight="bold"
+                leftIcon={<Icon as={FaWarehouse as ElementType} />}
+              color="blue.800"
+              rightIcon={<ChevronDownIcon />}
+            >
+              Depósito
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={() => setPagina('deposito')}>Cadastro Depósito</MenuItem>
+            </MenuList>
+          </Menu>
+
+          <Menu>
+            <MenuButton
+              as={Button}
+              variant="ghost"
+              fontWeight="bold"
+                leftIcon={<Icon as={FaClipboardList  as ElementType} />}
+              color="blue.800"
+              rightIcon={<ChevronDownIcon />}
+            >
+              Controle de Produtos
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={() => setPagina('produtoDeposito')}>Cadastro Produto Depósito</MenuItem>
+            </MenuList>
+          </Menu>
+
+          <Menu>
+            <MenuButton
+              as={Button}
+              variant="ghost"
+              fontWeight="bold"
+                leftIcon={<Icon as={FaChartBar as ElementType} />}
+              color="blue.800"
+              rightIcon={<ChevronDownIcon />}
+            >
+              Relatórios
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={() => setPagina('relatorio')}>Relatórios</MenuItem>
+            </MenuList>
+          </Menu>
+        </Flex>
+
+        {/* Espaço flexível entre menus e avatar */}
+        <Box flex="1" />
+
+        {/* Menu do usuário */}
+        <Menu>
+          <MenuButton
+            as={Button}
+            rounded="full"
+            variant="ghost"
+            cursor="pointer"
+            minW={0}
+            aria-label="Usuário"
+          >
+            <Avatar size="sm" name="Gustavo" bg="blue.800" />
+          </MenuButton>
+          <MenuList>
+            <MenuItem onClick={() => setPagina('perfil')}>Meu perfil</MenuItem>
+            <MenuItem onClick={() => setPagina('edit')}>Editar Perfil</MenuItem>
+            <Divider />
+            <MenuItem onClick={Sair}>Sair</MenuItem>
+          </MenuList>
+        </Menu>
+      </Flex>
+
+      {/* Conteúdo */}
+      <Box flex="1" p={6} overflowY="auto" position="relative" zIndex={1}>
         {renderConteudo()}
-      </main>
-    </div>
+      </Box>
+    </Flex>
   );
 };
 
-// Esse é o componente principal que define as rotas da aplicação
+
+
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
@@ -237,13 +199,16 @@ const AppRoutes: React.FC = () => {
       <Route path="/esqueciSenha" element={<EsqueciSenha onSuccess={function (contato: string): void { throw new Error('Function not implemented.'); }} />} />
       <Route path="/verificarCodigo" element={<VerificarCodigo />} />
       <Route path="/redefinirSenha" element={<RedefinirSenha />} />
+      <Route path="/deposito" element={<CadastroDeposito />} />
+      <Route path="/produtoDeposito" element={<ProdutoDeposito />} />
+      <Route path="/fornecedor" element={<CadastroDeFornecedor />} />
       <Route path="/cadastro" element={<CadastroNovo children={undefined} />} />
       <Route path="/editarMeuPerfil" element={<EditarMeuPerfil />} />
       <Route
         path="/CadastroProduto"
         element={
           <PrivateRoute>
-            <Home />
+            <Router />
           </PrivateRoute>
         }
       />
@@ -253,5 +218,4 @@ const AppRoutes: React.FC = () => {
     </Routes>
   );
 };
-
 export default AppRoutes;

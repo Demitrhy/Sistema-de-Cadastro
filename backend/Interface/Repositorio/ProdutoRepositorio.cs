@@ -204,6 +204,8 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio
                     parameters.Add("ID_TIPO", tipo);
                     parameters.Add("ID_GRUPO", grupo);
                     parameters.Add("ID_UNIDADE_MEDIDA", unidade);
+                    parameters.Add("FORNECEDOR", item.Fornecedor);
+
 
                     await connection.ExecuteAsync(ProdutoScript.InserirNovoProduto, parameters);
                 }

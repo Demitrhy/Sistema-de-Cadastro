@@ -1,14 +1,10 @@
 
-import axios from 'axios';
-import { CadastroLogin, Produto } from '../interface/Produto';
-
-
-const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+import { CadastroLogin } from '../interface/User';
+import {  Produto } from '../interface/Produto';
+import { Fornecedores } from '../interface/Fornecedor';
+import { toast } from 'react-toastify';
+import { Deposito } from '../interface/Deposito';
+import  api  from '../components/Axios';  
 
 
 export async function login(email: string, senha: string): Promise<string> {
@@ -27,7 +23,7 @@ export async function login(email: string, senha: string): Promise<string> {
       throw new Error('Token não encontrado na resposta');
     }
   } catch (error) {
-    console.error('Erro ao fazer login:', error);
+    toast.error('Erro ao fazer login:');
     throw error;
   }
 }
@@ -35,7 +31,7 @@ export async function CadastroLoginNovo(cadastro: CadastroLogin): Promise<void> 
   try {
     await api.post('/Auth/register', cadastro);
   } catch (error) {
-    console.error('Erro ao fazer register:', error);
+    toast.error('Erro ao fazer register:');
     throw error;
   }
 }
@@ -106,7 +102,7 @@ export async function BuscarProdutos(): Promise<Produto[]> {
     const response = await api.get<Produto[]>('/Produto/BuscarProdutosExistente');
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar produtos:", error);
+    toast.error("Erro ao buscar produtos:");
     throw error;
   }
 }
@@ -119,7 +115,7 @@ export async function enviarCodigoAPI(email: string | null, codigo: string): Pro
       codigo: "0"
     });
   } catch (error) {
-    console.error("Erro ao enviar código:", error);
+    toast.error("Erro ao enviar código:");
     throw error;
   }
 }
@@ -132,7 +128,7 @@ export async function validarCodigoAPI(email: string | null, codigo: string | nu
       codigo
     });
   } catch (error) {
-    console.error("Erro ao validar código:", error);
+    toast.error("Erro ao validar código:");
     throw error;
   }
 }
@@ -145,7 +141,7 @@ export async function redefimirSenha(email: string | null, senha: string): Promi
       senha
     });
   } catch (error) {
-    console.error("Erro ao validar código:", error);
+    toast.error("Erro ao validar código:");
     throw error;
   }
 }
@@ -164,8 +160,35 @@ export async function BuscarUsuario(): Promise<Usuario[]> {
     const response = await api.get<Usuario[]>('/Auth/BuscarUsuario');
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar produtos:", error);
+    toast.error("Erro ao buscar produtos:");
     throw error;
   }
 }
 
+
+// Fornecedor
+export async function ImportarFornecedor(forn: Fornecedores[]): Promise<void> {
+  try {
+    await api.post('/Fornecedor/InserirNovoFornecedor', forn);
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Deposito
+export async function ImportaNovoDeposito(deposito: Deposito[]): Promise<void> {
+  try {
+    await api.post('/Deposito/InserirNovoDeposito', deposito);
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Produto Deposito
+export async function ImportaNovoProdutoDeposito(planilha:any): Promise<void> {
+  try {
+    await api.post('/ProdutoDeposito/InserirNovoProdutoDeposito', planilha);
+  } catch (error) {
+    throw error;
+  }
+}

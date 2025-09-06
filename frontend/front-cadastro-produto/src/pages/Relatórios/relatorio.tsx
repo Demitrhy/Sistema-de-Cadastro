@@ -5,7 +5,7 @@ import { BuscarProdutos, EditarProduto, ExcluirProduto } from "../../api/Api";
 import 'font-awesome/css/font-awesome.min.css';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-const FormadorPreco: React.FC = () => {
+const Relatorios: React.FC = () => {
     const [planilha, setPlanilha] = useState<Array<Produto>>([]);
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -16,7 +16,6 @@ const FormadorPreco: React.FC = () => {
     const [precoVenda, setPrecoVenda] = useState(0);
     const [comissao, setComissao] = useState(0);
     const [liquido, setLiquido] = useState(0);
-
 
     useEffect(() => {
         const preco = custo + (custo * percLucro / 100);
@@ -33,6 +32,7 @@ const FormadorPreco: React.FC = () => {
             setPrecoVenda(produtoSelecionado.precoVenda ?? 0);
             setComissao(produtoSelecionado.comissao ?? 0)
             setLiquido(produtoSelecionado.liquido ?? 0)
+
         }
     }, [produtoSelecionado]);
 
@@ -41,7 +41,7 @@ const FormadorPreco: React.FC = () => {
         setLoading(true);
         try {
             const resultado = await BuscarProdutos();
-            
+
             if (resultado.length == 0) {
                 toast.warning("Não existe produto cadastrado");
             }
@@ -51,7 +51,7 @@ const FormadorPreco: React.FC = () => {
             }
         } catch (erro) {
             toast.error('Falha na busca dos produtos.');
-            console.error(erro);
+
         } finally {
             setLoading(false);
         }
@@ -70,8 +70,6 @@ const FormadorPreco: React.FC = () => {
         setModal(false);
         setProdutoSelecionado(null);
     }
-
-
 
     const handleEditar = (produto: Produto) => {
         setProdutoSelecionado(produto);
@@ -93,7 +91,8 @@ const FormadorPreco: React.FC = () => {
             comissao,
             precoVenda,
             percLucro,
-            custo
+            custo,
+
         };
 
         try {
@@ -104,7 +103,7 @@ const FormadorPreco: React.FC = () => {
             handleFechar();
         } catch (error) {
             toast.error('Erro ao salvar o produto');
-            console.error(error);
+
         }
     };
 
@@ -124,29 +123,40 @@ const FormadorPreco: React.FC = () => {
             fechar();
         } catch (error) {
             toast.error('Erro ao exluido o produto');
-            console.error(error);
-
         }
     };
 
     return (
-        <>
-            <div>
+        <> <div style={{
+            backgroundColor: '#f9f9f9',
+            minHeight: '100vh',
+            padding: '10px',
+            fontFamily: 'sans-serif',
+        }}>
+            <h2 style={{ fontSize: '18px', marginBottom: '20px', color: '#003865' }}> Formador de Preços </h2>
+            <div style={{
+                backgroundColor: '#f9f9f9',
+                minHeight: '100vh',
+                padding: '10px',
+                fontFamily: 'sans-serif',
+            }}>
+
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
                         <tr style={{ backgroundColor: '#0d6efd', borderSpacing: '10px 0', color: '#ffffff' }}>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Produto</th>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Nome</th>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Marca</th>
+                            <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Fornecedor</th>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Tipo</th>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Grupo</th>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Situacao</th>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Unid. Medida</th>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Custo</th>
-                            <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Perc. Lucro (%)</th>
-                            <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Preço Venda (R$)</th>
-                            <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Comissão (%)</th>
-                            <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Líquido (R$)</th>
+                            <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Perc. Lucro(%)</th>
+                            <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Preço Venda(R$)</th>
+                            <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Comissão(%)</th>
+                            <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Líquido(R$)</th>
                             <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Editar</th>
                         </tr>
                     </thead>
@@ -156,6 +166,7 @@ const FormadorPreco: React.FC = () => {
                                 <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.produto}</td>
                                 <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.nome}</td>
                                 <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.marca}</td>
+                                <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.fornecedor}</td>
                                 <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.tipo}</td>
                                 <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.grupo}</td>
                                 <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.situacao}</td>
@@ -165,7 +176,7 @@ const FormadorPreco: React.FC = () => {
                                 <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.precoVenda}</td>
                                 <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.comissao}</td>
                                 <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.liquido}</td>
-                                <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>
+                                <td style={{ padding: '10px',display: 'flex', flexDirection: 'row' , border: '1px solid #dee2e6', textAlign: 'center' }}>
                                     <button
                                         style={{
                                             padding: '5px 10px',
@@ -174,7 +185,9 @@ const FormadorPreco: React.FC = () => {
                                             borderRadius: '6px',
                                             color: 'white',
                                             fontWeight: 'bold',
-                                            marginRight: '15px'
+                                            marginRight: '10px',
+                                            
+
                                         }}
                                         onClick={() => handleEditar(item)}
                                     >
@@ -187,7 +200,9 @@ const FormadorPreco: React.FC = () => {
                                             border: 'none',
                                             borderRadius: '6px',
                                             color: 'white',
-                                            fontWeight: 'bold'
+                                            fontWeight: 'bold',
+                                          
+
                                         }}
                                         onClick={() => excluir(item)}
                                     >
@@ -198,6 +213,7 @@ const FormadorPreco: React.FC = () => {
                         ))}
                     </tbody>
                 </table>
+
             </div>
 
             {/* Modal de Edição */}
@@ -214,19 +230,26 @@ const FormadorPreco: React.FC = () => {
                         }}>
                             {/* Primeira linha */}
                             <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                                <div style={{ flex: 1 }} aria-disabled>
+                                <div style={{ flex: 1 }} >
+                                    <label style={{ color: 'black' }}>Fornecedor</label>
+                                    <Form.Control
+                                        disabled
+                                        defaultValue={produtoSelecionado.fornecedor}
+                                    />
+                                </div>
+                                <div style={{ flex: 2 }} >
                                     <label style={{ color: 'black' }}>Código</label>
-
                                     <Form.Control disabled defaultValue={produtoSelecionado.produto} />
                                 </div>
-                                <div style={{ flex: 1 }}>
+                                <div style={{ flex: 3 }}>
                                     <label style={{ color: 'black' }}>Tipo</label>
                                     <Form.Control disabled defaultValue={produtoSelecionado.tipo} />
                                 </div>
-                                <div style={{ flex: 2 }}>
+                                <div style={{ flex: 4 }}>
                                     <label style={{ color: 'black' }}>Nome</label>
                                     <Form.Control disabled defaultValue={produtoSelecionado.nome} />
                                 </div>
+
                             </div>
 
                             {/* Segunda linha */}
@@ -369,8 +392,9 @@ const FormadorPreco: React.FC = () => {
                     </Modal.Footer>
                 </Modal>
             )}
+        </div>
         </>
     );
 };
 
-export default FormadorPreco;
+export default Relatorios;

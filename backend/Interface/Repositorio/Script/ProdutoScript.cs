@@ -19,6 +19,7 @@
             ,ID_TIPO as IdTipo
             ,ID_GRUPO	 as IdGrupo
             ,ID_UNIDADE_MEDIDA as IdUnidade
+            ,FORN_CD_FORNECEDOR AS Fornecedor
          FROM PRODUTO_MESTRE WHERE PM_CD_PRODUTO = @Produto
           ";
         public static string BuscarProdutos => @"
@@ -30,6 +31,7 @@
                ,PM_ST_SITUACAO	as Situacao
                ,PM_TX_MARCA	as Marca
                ,PM_RS_CUSTO	as Custo
+               ,FORN_CD_FORNECEDOR AS Fornecedor
                ,PM_RS_PERC_LUCRO	as PercLucro
                ,PM_RS_PRECO_VENDA	as PrecoVenda
                ,PM_RS_COMISSAO	as Comissao
@@ -40,7 +42,6 @@
             FROM PRODUTO_MESTRE PM 
             JOIN GRUPO GP ON PM.ID_GRUPO = GP.ID
             JOIN TIPO TP ON PM.ID_TIPO = TP.ID
-            AND GP.ID = TP.ID_Grupo 
             JOIN UNIDADE_MEDIDA UM ON PM.ID_UNIDADE_MEDIDA = UM.ID 
 
           ";
@@ -106,7 +107,8 @@
                    ,PM_RS_LIQUIDO
                    ,ID_TIPO
                    ,ID_GRUPO
-                   ,ID_UNIDADE_MEDIDA)
+                   ,ID_UNIDADE_MEDIDA
+                   ,FORN_CD_FORNECEDOR)
            VALUES
                    (@PM_CD_PRODUTO
                    ,@PM_CD_DIGITO
@@ -122,6 +124,7 @@
                    ,@ID_TIPO 
                    ,@ID_GRUPO
                    ,@ID_UNIDADE_MEDIDA
+                   ,@FORNECEDOR
         		   )     ";
 
         public static string AlterarSituacaoProduto => @"

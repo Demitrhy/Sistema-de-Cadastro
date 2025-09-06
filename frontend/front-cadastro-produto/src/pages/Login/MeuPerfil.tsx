@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { BuscarUsuario } from "../../api/Api";
+import { toast } from "react-toastify";
 
 
 const MeuPerfil: React.FC = () => {
@@ -27,7 +28,7 @@ const MeuPerfil: React.FC = () => {
                 });
 
             } catch (error) {
-                console.error('Erro ao buscar perfil:', error);
+                toast.error('Erro ao buscar perfil:');
             }
         };
 

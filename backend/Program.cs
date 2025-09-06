@@ -31,16 +31,22 @@ public class Program
         builder.Services.AddScoped<SqlConnection>(_ => new SqlConnection(connectionString));
         builder.Services.AddScoped<IProdutoRepositorio, ProdutoRepositorio>();
         builder.Services.AddScoped<IProdutoService, ProdutoService>();
+        builder.Services.AddScoped<IFornecedorService, FornecedorService>();
+        builder.Services.AddScoped<IFornecedorRepositorio, FornecedorRepositorio>();
+        builder.Services.AddScoped<IProdutoDepositoService, ProdutoDepositoService>();
+        builder.Services.AddScoped<IProdutoDepositoRepositorio, ProdutoDepositoRepositorio>();
         builder.Services.AddScoped<ICodigoService, CodigoService>();
+        builder.Services.AddScoped<IDepositoService, DepositoService>();
+        builder.Services.AddScoped<IDepositoRepositorio, DepositoRepositorio>();
         builder.Services.AddScoped<ILogin, LoginService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
       
-
-
-
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        
+        var validar = Guid.NewGuid();
+        
 
         // CORS
         builder.Services.AddCors(options => {
