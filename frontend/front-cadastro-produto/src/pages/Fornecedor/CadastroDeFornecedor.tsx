@@ -434,10 +434,9 @@ const CadastroDeFornecedor: React.FC = () => {
                     </div>
                     <div style={{ display: 'flex', gap: '20px', marginBottom: '15px' }}>
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Complemento:</label>
+                            <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Complemento: <small>(Opcional)</small></label>
                             <input
                                 type="text"
-
                                 value={complemento}
                                 onChange={(e) => setComplemento(e.target.value)}
                                 style={{
@@ -450,7 +449,7 @@ const CadastroDeFornecedor: React.FC = () => {
                             />
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Observacão:</label>
+                            <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Observação: <small>(Opcional)</small></label>
                             <input
                                 type="text"
                                 value={observacoes}

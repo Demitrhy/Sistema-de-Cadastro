@@ -190,32 +190,32 @@ const Router: React.FC = () => {
   );
 };
 
+export default Router;
 
+// const AppRoutes: React.FC = () => {
+//   return (
+//     <Routes>
+//       <Route path="/login" element={<Login />} />
+//       <Route path="/esqueciSenha" element={<EsqueciSenha onSuccess={function (contato: string): void { throw new Error('Function not implemented.'); }} />} />
+//       <Route path="/verificarCodigo" element={<VerificarCodigo />} />
+//       <Route path="/redefinirSenha" element={<RedefinirSenha />} />
+//       <Route path="/deposito" element={<CadastroDeposito />} />
+//       <Route path="/produtoDeposito" element={<ProdutoDeposito />} />
+//       <Route path="/fornecedor" element={<CadastroDeFornecedor />} />
+//       <Route path="/cadastro" element={<CadastroNovo children={undefined} />} />
+//       <Route path="/editarMeuPerfil" element={<EditarMeuPerfil />} />
+//       <Route
+//         path="/CadastroProduto"
+//         element={
+//           <PrivateRoute>
+//             <Router />
+//           </PrivateRoute>
+//         }
+//       />
+//       {/* Redirecionamento padrão */}
+//       <Route path="*" element={<Navigate to="/Login" />} />
 
-const AppRoutes: React.FC = () => {
-  return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/esqueciSenha" element={<EsqueciSenha onSuccess={function (contato: string): void { throw new Error('Function not implemented.'); }} />} />
-      <Route path="/verificarCodigo" element={<VerificarCodigo />} />
-      <Route path="/redefinirSenha" element={<RedefinirSenha />} />
-      <Route path="/deposito" element={<CadastroDeposito />} />
-      <Route path="/produtoDeposito" element={<ProdutoDeposito />} />
-      <Route path="/fornecedor" element={<CadastroDeFornecedor />} />
-      <Route path="/cadastro" element={<CadastroNovo children={undefined} />} />
-      <Route path="/editarMeuPerfil" element={<EditarMeuPerfil />} />
-      <Route
-        path="/CadastroProduto"
-        element={
-          <PrivateRoute>
-            <Router />
-          </PrivateRoute>
-        }
-      />
-      {/* Redirecionamento padrão */}
-      <Route path="*" element={<Navigate to="/Login" />} />
-
-    </Routes>
-  );
-};
-export default AppRoutes;
+//     </Routes>
+//   );
+// };
+// export default AppRoutes;

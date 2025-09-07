@@ -367,7 +367,7 @@ const CadastroDeDeposito: React.FC = () => {
                         />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-                        <label style={{ fontWeight: "bold", marginBottom: "6px" }}>Produtos Restritos:</label>
+                        <label style={{ fontWeight: "bold", marginBottom: "6px" }}>Produtos Restritos: <small>(Opcional)</small></label>
                         <textarea
                             placeholder="Informe produtos restritos"
                             value={produtosRestritos}

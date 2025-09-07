@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Deposito, Produto, ProdutoDeposito } from "../../interface/ProdutoDeposito";
-import axios from "axios";
 import { Button, Form, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { ImportaNovoProdutoDeposito } from "../../api/Api";
@@ -153,7 +152,7 @@ const ControleProdutoDeposito: React.FC = () => {
                             {produtos.map((f) => (
                                 <option key={f.produto} value={`${f.produto}${f.digito}`}>
                                     {f.produto}{f.digito} - {f.nome}
-                                </option>
+                                </option>       
                             ))}
                         </select>
 
@@ -250,6 +249,7 @@ const ControleProdutoDeposito: React.FC = () => {
                     </div>
 
                 </div>
+                
                 <div style={{ display: 'flex', gap: '10px', marginBottom: '15px', justifyContent: 'flex-end' }}>
                     <button
                         onClick={() => handleImporta()}

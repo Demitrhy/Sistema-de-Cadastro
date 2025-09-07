@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Fornecedor, Produto } from '../../interface/Produto';
 import { Importar } from '../../api/Api';
 import { toast } from 'react-toastify';
-import  api  from '../../components/Axios';
+import { Button, Form, Modal } from "react-bootstrap";
+import api from '../../components/Axios';
 
 const CadastroIndividual: React.FC = () => {
     const [planilha, setPlanilha] = useState<Array<Produto>>([]);
@@ -25,6 +26,7 @@ const CadastroIndividual: React.FC = () => {
     const [situacao, setSituacao] = useState("");
     const [loading, setLoading] = useState(false);
     const [carregado, setCarregado] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     const limparCampos = () => {
         setProduto(0);
@@ -53,6 +55,14 @@ const CadastroIndividual: React.FC = () => {
         setPrecoVenda(preco);
         setLiquido(liquidoCalc);
     }, [custo, percLucro, comissao]);
+
+    const handleImporta = () => {
+        setShowModal(true);
+    };
+
+    const handleFechar = () => {
+        setShowModal(false);
+    };
 
 
     useEffect(() => {
@@ -102,7 +112,7 @@ const CadastroIndividual: React.FC = () => {
                 precoVenda,
                 liquido,
                 digito,
-                fornecedor:  fornecedorSelecionado! ,
+                fornecedor: fornecedorSelecionado!,
                 situacao: situacao.trim(),
                 marca: marca.trim(),
                 tipo: tipo.trim(),
@@ -447,155 +457,171 @@ const CadastroIndividual: React.FC = () => {
                     </div>
 
                 </div>
-
-                <div style={{
-                    border: '1px solid #dee2e6',
-                    borderRadius: '8px',
-                    padding: '10px',
-                    backgroundColor: '#ffffff',
-                    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.05)',
-                    marginTop: '10px'
-                }}>
-
-                    <div style={{ display: 'flex', gap: '10px', marginBottom: '15px', justifyContent: 'flex-end' }}>
-                        <button
-                            onClick={adicionarProduto}
-                            disabled={
+                <div style={{ display: 'flex', gap: '10px', marginBottom: '15px', justifyContent: 'flex-end' }}>
+                    <button
+                        onClick={() => handleImporta()}
+                        disabled={
+                            (!produtoAutomatico && !codigoBloqueado && (produto === '' || typeof produto !== 'number' || produto <= 0)) ||
+                            custo <= 0 ||
+                            tipo.trim() === '' ||
+                            nome.trim() === '' ||
+                            marca.trim() === '' ||
+                            grupo.trim() === '' ||
+                            unidade.trim() === '' ||
+                            situacao.trim() === '' ||
+                            percLucro <= 0 ||
+                            comissao <= 0 ||
+                            liquido <= 0 ||
+                            fornecedor.length <= 0 ||
+                            loading
+                        }
+                        style={{
+                            opacity:
                                 (!produtoAutomatico && !codigoBloqueado && (produto === '' || typeof produto !== 'number' || produto <= 0)) ||
-                                custo <= 0 ||
-                                tipo.trim() === '' ||
-                                nome.trim() === '' ||
-                                marca.trim() === '' ||
-                                grupo.trim() === '' ||
-                                unidade.trim() === '' ||
-                                situacao.trim() === '' ||
-                                percLucro <= 0 ||
-                                comissao <= 0 ||
-                                liquido <= 0 ||
-                                fornecedor.length <= 0 ||
-                                loading
-                            }
-                            style={{
-                                opacity:
-                                    (!produtoAutomatico && !codigoBloqueado && (produto === '' || typeof produto !== 'number' || produto <= 0)) ||
-                                        custo <= 0 ||
-                                        tipo.trim() === '' ||
-                                        nome.trim() === '' ||
-                                        marca.trim() === '' ||
-                                        grupo.trim() === '' ||
-                                        unidade.trim() === '' ||
-                                        situacao.trim() === '' ||
-                                        percLucro <= 0 ||
-                                        comissao <= 0 ||
-                                        liquido <= 0 ||
-                                        fornecedor.length <= 0 ||
-                                        loading
-                                        ? 0.5
-                                        : 1,
-                                cursor:
-                                    (!produtoAutomatico && !codigoBloqueado && (produto === '' || typeof produto !== 'number' || produto <= 0)) ||
-                                        custo <= 0 ||
-                                        tipo.trim() === '' ||
-                                        nome.trim() === '' ||
-                                        marca.trim() === '' ||
-                                        grupo.trim() === '' ||
-                                        unidade.trim() === '' ||
-                                        situacao.trim() === '' ||
-                                        percLucro <= 0 ||
-                                        comissao <= 0 ||
-                                        liquido <= 0 ||
-                                        fornecedor.length <= 0 ||
-                                        loading
-                                        ? 'not-allowed'
-                                        : 'pointer',
-                                padding: '10px 20px',
-                                backgroundColor: '#28a745',
-                                border: 'none',
-                                borderRadius: '6px',
-                                color: 'white',
-                                fontWeight: 'bold'
-                            }}
-                        >
-                            + Adicionar Cadastro
-                        </button>
+                                    custo <= 0 ||
+                                    tipo.trim() === '' ||
+                                    nome.trim() === '' ||
+                                    marca.trim() === '' ||
+                                    grupo.trim() === '' ||
+                                    unidade.trim() === '' ||
+                                    situacao.trim() === '' ||
+                                    percLucro <= 0 ||
+                                    comissao <= 0 ||
+                                    liquido <= 0 ||
+                                    fornecedor.length <= 0 ||
+                                    loading
+                                    ? 0.5
+                                    : 1,
+                            cursor:
+                                (!produtoAutomatico && !codigoBloqueado && (produto === '' || typeof produto !== 'number' || produto <= 0)) ||
+                                    custo <= 0 ||
+                                    tipo.trim() === '' ||
+                                    nome.trim() === '' ||
+                                    marca.trim() === '' ||
+                                    grupo.trim() === '' ||
+                                    unidade.trim() === '' ||
+                                    situacao.trim() === '' ||
+                                    percLucro <= 0 ||
+                                    comissao <= 0 ||
+                                    liquido <= 0 ||
+                                    fornecedor.length <= 0 ||
+                                    loading
+                                    ? 'not-allowed'
+                                    : 'pointer',
+                            padding: '10px 20px',
+                            backgroundColor: '#007bff',
+                            border: 'none',
+                            borderRadius: '15px',
+                            color: 'white',
+                            fontWeight: 'bold',
+                            marginTop:'25px'
+                        }}
+                    >
+                        ▶ Importar
+                    </button>
 
-                        <button
-                            onClick={Importa}
-                            disabled={planilha.length === 0 || loading}
-                            style={{
-                                opacity: planilha.length === 0 || loading ? 0.5 : 1,
-                                cursor: planilha.length === 0 || loading ? 'not-allowed' : 'pointer',
-                                padding: '10px 20px',
-                                backgroundColor: '#007bff',
-                                border: 'none',
-                                borderRadius: '6px',
-                                color: 'white',
-                                fontWeight: 'bold'
-                            }}
-                        >
-                            {loading ? 'Importando...' : '▶ Importar Cadastro'}
-                        </button>
-
-                        <button onClick={limparPlanilha}
-                            disabled={planilha.length === 0 || loading}
-                            style={{
-                                opacity: planilha.length === 0 || loading ? 0.5 : 1,
-                                cursor: planilha.length === 0 || loading ? 'not-allowed' : 'pointer',
-                                padding: '10px 20px',
-                                backgroundColor: '#dc3545 ',
-                                border: 'none',
-                                borderRadius: '6px',
-                                color: 'white',
-                                fontWeight: 'bold'
-                            }}>
-
-                            🗑️ Limpar
-                        </button>
-                    </div>
-
-
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                        <thead>
-                            <tr style={{ backgroundColor: '#0d6efd', color: '#ffffff' }}>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Produto</th>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Nome</th>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Marca</th>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Fornecedor</th>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Tipo</th>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Grupo</th>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Situacao</th>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Unid. Medida</th>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Custo</th>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Perc. Lucro (%)</th>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Preço Venda (R$)</th>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Comissão (%)</th>
-                                <th style={{ padding: '12px', border: '1px solid #dee2e6', textAlign: 'center' }}>Líquido (R$)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {planilha.map((item: Produto, idx: number) => (
-                                <tr key={idx}>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>
-                                        {item.produto > 0 ? item.produto : 'Automático'}
-                                    </td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.nome}</td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.marca}</td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.fornecedor}</td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.tipo}</td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.grupo}</td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.situacao}</td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.unidadeMedida}</td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.custo}</td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.percLucro}</td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.precoVenda}</td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.comissao}</td>
-                                    <td style={{ padding: '10px', border: '1px solid #dee2e6', textAlign: 'center' }}>{item.liquido}</td>
-
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
                 </div>
+                <Modal show={showModal} onHide={handleFechar} size="xl" centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Tem certeza de cadastrar esse Produto?</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {/* Linha 1: Fornecedor, Código, Tipo, Nome */}
+                        <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                            <div style={{ flex: 2 }}>
+                                <label style={{ color: 'black' }}>Fornecedor</label>
+                                <Form.Control disabled defaultValue={fornecedorSelecionado ?? ''} />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <label style={{ color: 'black' }}>Código</label>
+                                <Form.Control disabled defaultValue={produto ?? ''} />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <label style={{ color: 'black' }}>Tipo</label>
+                                <Form.Control disabled defaultValue={tipo} />
+                            </div>
+                            <div style={{ flex: 2 }}>
+                                <label style={{ color: 'black' }}>Nome</label>
+                                <Form.Control disabled defaultValue={nome} />
+                            </div>
+                        </div>
+
+                        {/* Linha 2: Grupo, Marca, Unidade Medida */}
+                        <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                            <div style={{ flex: 1 }}>
+                                <label style={{ color: 'black' }}>Grupo</label>
+                                <Form.Control disabled defaultValue={grupo} />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <label style={{ color: 'black' }}>Marca</label>
+                                <Form.Control disabled defaultValue={marca} />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <label style={{ color: 'black' }}>Unidade Medida</label>
+                                <Form.Control disabled defaultValue={unidade} />
+                            </div>
+                        </div>
+
+                        {/* Linha 3: Status, Custo, Perc. Lucro, Preço Venda, Comissão, Líquido */}
+                        <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                            <div style={{ flex: 1 }}>
+                                <label style={{ color: 'black' }}>Status</label>
+                                <Form.Control disabled defaultValue={situacao} />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <label style={{ color: 'black' }}>Custo</label>
+                                <Form.Control disabled defaultValue={custo} />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <label style={{ color: 'black' }}>Perc. de Lucro (%)</label>
+                                <Form.Control disabled defaultValue={percLucro} />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <label style={{ color: 'black' }}>Preço Venda (R$)</label>
+                                <Form.Control disabled defaultValue={precoVenda} />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <label style={{ color: 'black' }}>Comissão (%)</label>
+                                <Form.Control disabled defaultValue={comissao} />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <label style={{ color: 'black' }}>Líquido (R$)</label>
+                                <Form.Control disabled defaultValue={liquido} />
+                            </div>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            onClick={Importa}
+                            style={{
+                                padding: "10px 20px",
+                                backgroundColor: "#28a745",
+                                border: "none",
+                                borderRadius: "6px",
+                                color: "white",
+                                fontWeight: "bold",
+                            }}
+                            disabled={loading}
+                        >
+                            {loading ? "Importando..." : "▶ Importar Cadastro"}
+                        </Button>
+                        <Button
+                            onClick={handleFechar}
+                            style={{
+                                padding: "10px 20px",
+                                backgroundColor: "#dc3545",
+                                border: "none",
+                                borderRadius: "6px",
+                                color: "white",
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Fechar
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+
             </div>
         </div>
     );
