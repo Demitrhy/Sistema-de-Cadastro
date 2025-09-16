@@ -37,9 +37,10 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Service
         {
             try
             {
-                int digitoAleatorio = _random.Next(1, 10);
                 foreach (var produto in produtos)
                 {
+                    int digitoAleatorio = _random.Next(1, 10);
+
                     if (produto.codigoBloqueado == false)
                     {
                         int produtoAleatorio = 0;
@@ -50,9 +51,7 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Service
 
                         if (buscar == 0)
                         {
-
                             await _produtoRepositorio.InserirProdutoNovo(produtos, produtoAleatorio, digitoAleatorio, tipo, grupo, unidade);
-
                         }
                         else
                             throw new Exception($"Esse produto {produto.Produto} já existe!");
@@ -64,10 +63,8 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Service
                         var grupo = _produtoRepositorio.BuscarGrupo(produto.Grupo);
                         var unidade = _produtoRepositorio.BuscarUnidade(produto.UnidadeMedida);
 
-                        int produtoAleatorio = _random.Next(1, 1000000000);
                         int produtoCodigo = await _produtoRepositorio.BuscarMaiorCodigo();
 
-            
                         await _produtoRepositorio.InserirProdutoNovo(produtos, produtoCodigo, digitoAleatorio, tipo, grupo, unidade);
 
                     }

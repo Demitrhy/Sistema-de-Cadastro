@@ -12,24 +12,26 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
-import { FaBoxes, FaTruck, FaWarehouse, FaChartBar, FaClipboardList } from 'react-icons/fa';
-import CadastroIndividual from '../pages/CadastroDeProdutos/CadastroIndividual';
+import { FaBoxes, FaTruck, FaWarehouse, FaChartBar, FaClipboardList, FaStore } from 'react-icons/fa';
+import CadastroIndividual from '../pages/CadastroDeProdutos';
 import MeuPerfil from '../pages/Login/MeuPerfil';
 import EditarMeuPerfil from '../pages/Login/EditarMeuPerfil';
-import CadastroDeFornecedor from '../pages/Fornecedor/CadastroDeFornecedor';
-import Relatorio from '../pages/Relatórios/relatorio';
+import CadastroDeFornecedor from '../pages/Fornecedor';
+import Relatorio from '../pages/Relatórios';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
-import CadastroDeposito from '../pages/Deposito/CadastroDeposito';
+import CadastroDeposito from '../pages/Deposito';
+import CadastroFilial from '../pages/Filial';
 import Login from '../pages/Login/Login';
 import EsqueciSenha from '../pages/Login/EsqueciSenha';
 import VerificarCodigo from '../pages/Login/VerificarCodigo';
 import RedefinirSenha from '../pages/Login/RedefinirSenha';
 import CadastroNovo from '../pages/Login/CadastroNovo';
 import { PrivateRoute } from '../components/PrivateRoute';
-import ProdutoDeposito from '../pages/ControleDeProduto/ProdutoDeposito';
+import ProdutoDeposito from '../pages/ControleDeProduto';
 
 const Router: React.FC = () => {
-  const [pagina, setPagina] = useState<'home' | 'individual' | 'produtoDeposito' | 'perfil' | 'edit' | 'fornecedor' | 'deposito' | 'relatorio'>('home');
+  const [pagina, setPagina] = useState<'home' | 'individual' | 'produtoDeposito' | 'perfil' | 
+  'edit' | 'fornecedor' | 'deposito' | 'filial' |'relatorio'>('home');
   const navigate = useNavigate();
 
   const renderConteudo = () => {
@@ -38,6 +40,7 @@ const Router: React.FC = () => {
       case 'fornecedor': return <CadastroDeFornecedor />;
       case 'deposito': return <CadastroDeposito />;
       case 'produtoDeposito': return <ProdutoDeposito />;
+      case 'filial': return <CadastroFilial />;
       case 'perfil': return <MeuPerfil />;
       case 'relatorio': return <Relatorio />;
       case 'edit': return <EditarMeuPerfil />;
@@ -77,21 +80,23 @@ const Router: React.FC = () => {
 
         {/* Menus */}
         <Flex gap={6}>
-          <Menu>
+           <Menu>
             <MenuButton
               as={Button}
-              leftIcon={<Icon as={FaBoxes as ElementType} />} 
               variant="ghost"
               fontWeight="bold"
+                leftIcon={<Icon as={FaStore  as ElementType} />}
               color="blue.800"
               rightIcon={<ChevronDownIcon />}
             >
-              Produto
+              Filial
             </MenuButton>
             <MenuList>
-              <MenuItem onClick={() => setPagina('individual')}>Cadastro Produto</MenuItem>
+              <MenuItem onClick={() => setPagina('filial')}>Cadastro Filial</MenuItem>
             </MenuList>
           </Menu>
+
+        
 
           <Menu>
             <MenuButton
@@ -125,6 +130,22 @@ const Router: React.FC = () => {
             </MenuList>
           </Menu>
 
+            <Menu>
+            <MenuButton
+              as={Button}
+              leftIcon={<Icon as={FaBoxes as ElementType} />} 
+              variant="ghost"
+              fontWeight="bold"
+              color="blue.800"
+              rightIcon={<ChevronDownIcon />}
+            >
+              Produto
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={() => setPagina('individual')}>Cadastro Produto</MenuItem>
+            </MenuList>
+          </Menu>
+
           <Menu>
             <MenuButton
               as={Button}
@@ -140,6 +161,8 @@ const Router: React.FC = () => {
               <MenuItem onClick={() => setPagina('produtoDeposito')}>Cadastro Produto Depósito</MenuItem>
             </MenuList>
           </Menu>
+
+         
 
           <Menu>
             <MenuButton
@@ -201,6 +224,7 @@ export default Router;
 //       <Route path="/redefinirSenha" element={<RedefinirSenha />} />
 //       <Route path="/deposito" element={<CadastroDeposito />} />
 //       <Route path="/produtoDeposito" element={<ProdutoDeposito />} />
+//       <Route path="/filial" element={<CadastroFilial />} />
 //       <Route path="/fornecedor" element={<CadastroDeFornecedor />} />
 //       <Route path="/cadastro" element={<CadastroNovo children={undefined} />} />
 //       <Route path="/editarMeuPerfil" element={<EditarMeuPerfil />} />
