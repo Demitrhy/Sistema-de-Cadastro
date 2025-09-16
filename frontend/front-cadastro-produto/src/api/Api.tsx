@@ -192,3 +192,12 @@ export async function ImportaNovoProdutoDeposito(planilha:any): Promise<void> {
     throw error;
   }
 }
+
+// Filial
+export async function ImportaNovaFilial(planilha:any): Promise<void> {
+  try {
+    await api.post('/filial/InserirNovaFilial', planilha);
+  } catch (error) {
+    throw error;
+  }
+}

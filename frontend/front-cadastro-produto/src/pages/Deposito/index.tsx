@@ -1,12 +1,23 @@
 import { useState } from "react";
-import { Deposito } from "../../interface/Deposito";
 import { IMaskInput } from 'react-imask';
 import { Button, Form, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { ImportaNovoDeposito } from "../../api/Api";
+import Phone from "../../components/telefone";
+import Cep from "../../components/cep";
+import Cnpj from "../../components/cnpj";
+import Status from "../../components/selectStatus";
+import { Deposito } from "../../interface/Deposito";
+import Uf from "../../components/selectUf";
+import Email from "../../components/email";
+import Nome from "../../components/nome";
+import Endereco from "../../components/endereco";
+import Numero from "../../components/numero";
+import Bairro from "../../components/bairro";
+import Cidade from "../../components/cidade";
+
 
 const CadastroDeDeposito: React.FC = () => {
-    const [deposito, setDeposito] = useState<Deposito>();
     const [nome, setNome] = useState("");
     const [fantasia, setFantasia] = useState("");
     const [telefone, setTelefone] = useState("");
@@ -50,10 +61,7 @@ const CadastroDeDeposito: React.FC = () => {
         { nome: "Rio de Janeiro", sigla: "RJ" },
     ];
 
-    const status = [
-        { nome: "Ativo", sigla: "A" },
-        { nome: "Desativado", sigla: "D" },
-    ];
+
 
 
     const handleImporta = () => {
@@ -101,8 +109,6 @@ const CadastroDeDeposito: React.FC = () => {
         }
     }
 
-
-    const Importa = async () => { }
     return (
         <div style={{ backgroundColor: "#f9f9f9", padding: "10px" }}>
             <h2 style={{ fontSize: "18px", marginBottom: "20px", color: "#003865" }}>
@@ -119,38 +125,15 @@ const CadastroDeDeposito: React.FC = () => {
             >
 
                 <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
+
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label style={{ fontWeight: "bold", marginBottom: "6px" }}>CNPJ:</label>
-                        <IMaskInput
-                            mask="00.000.000/0000-00"
-                            value={cnpj}
-                            onAccept={(value) => setCnpj(value)}
-                            placeholder="00.000.000/0000-00"
-                            style={{
-                                padding: "5px",
-                                fontSize: "16px",
-                                borderRadius: "4px",
-                                border: "1px solid #ccc",
-                                width: "200px",
-                            }}
-                        />
+                        <Cnpj value={cnpj} onChange={(value) => setCnpj(cnpj)} />
                     </div>
+
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label style={{ fontWeight: "bold", marginBottom: "6px" }}>Nome:</label>
-                        <input
-                            type="text"
-                            placeholder="Nome do Depósito"
-                            value={nome}
-                            onChange={(e) => setNome(e.target.value)}
-                            style={{
-                                padding: "5px",
-                                fontSize: "16px",
-                                borderRadius: "4px",
-                                border: "1px solid #ccc",
-                                width: "500px",
-                            }}
-                        />
+                        <Nome value={nome} onChange={setNome} />
                     </div>
+
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label style={{ fontWeight: "bold", marginBottom: "6px" }}>Fantasia:</label>
                         <input
@@ -163,175 +146,55 @@ const CadastroDeDeposito: React.FC = () => {
                                 fontSize: "16px",
                                 borderRadius: "4px",
                                 border: "1px solid #ccc",
-                                width: "500px",
+                                width: "450px",
                             }}
                         />
                     </div>
                 </div>
                 <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
-
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label style={{ fontWeight: "bold", marginBottom: "6px" }}>Endereço:</label>
-                        <input
-                            type="text"
-                            placeholder="Endereço"
-                            value={endereco}
-                            onChange={(e) => setEndereco(e.target.value)}
-                            style={{
-                                padding: "5px",
-                                fontSize: "16px",
-                                borderRadius: "4px",
-                                border: "1px solid #ccc",
-                                width: "400px",
-                            }}
-                        />
+                        <Endereco value={endereco} onChange={setEndereco} />
                     </div>
+
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Número:</label>
-                        <input
-                            type="text"
-                            placeholder="Número"
-                            value={numero}
-                            onChange={(e) => setNumero(parseInt(e.target.value))}
-                            style={{
-                                padding: '5px',
-                                fontSize: '16px',
-                                borderRadius: '4px',
-                                border: '1px solid #ccc',
-                                width: '150px',
-                            }}
-                        />
+                        <Numero value={numero} onChange={setNumero} />
                     </div>
+
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label style={{ fontWeight: "bold", marginBottom: "6px" }}>Bairro:</label>
-                        <input
-                            type="text"
-                            placeholder="Bairro"
-                            value={bairro}
-                            onChange={(e) => setBairro(e.target.value)}
-                            style={{
-                                padding: "5px",
-                                fontSize: "16px",
-                                borderRadius: "4px",
-                                border: "1px solid #ccc",
-                                width: "400px",
-                            }}
-                        />
+                        <Bairro value={bairro} onChange={setBairro} />
                     </div>
+
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label style={{ fontWeight: "bold", marginBottom: "6px" }}>Cidade:</label>
-                        <input
-                            type="text"
-                            placeholder="Cidade"
-                            value={cidade}
-                            onChange={(e) => setCidade(e.target.value)}
-                            style={{
-                                padding: "5px",
-                                fontSize: "16px",
-                                borderRadius: "4px",
-                                border: "1px solid #ccc",
-                                width: "300px",
-                            }}
-                        />
+                        <Cidade value={cidade} onChange={setCidade} />
                     </div>
                 </div>
 
 
                 <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label style={{ fontWeight: "bold", marginBottom: "8px" }}>UF:</label>
-                        <select
-                            value={uf}
-                            onChange={(e) => setUf(e.target.value)}
-                            style={{
-                                padding: "5px",
-                                fontSize: "16px",
-                                borderRadius: "4px",
-                                border: "1px solid #ccc",
-                                width: "240px",
-                            }}
-                        >
-                            <option value="">Selecione uma UF</option>
-                            {estados.map((estado) => (
-                                <option key={estado.sigla} value={estado.sigla}>
-                                    {estado.nome} ({estado.sigla})
-                                </option>
-                            ))}
-                        </select>
+                        <Uf value={uf} onChange={setUf} />
                     </div>
+
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label style={{ fontWeight: "bold", marginBottom: "6px" }}>Telefone:</label>
-                        <IMaskInput
-                            mask="(00)00000-0000"
-                            value={telefone}
-                            onAccept={(value) => setTelefone(value)}
-                            placeholder="(00)00000-0000"
-                            style={{
-                                padding: "5px",
-                                fontSize: "16px",
-                                borderRadius: "4px",
-                                border: "1px solid #ccc",
-                                width: "300px",
-                            }}
-                        />
+                        <Phone value={telefone} onChange={(value) => setTelefone(telefone)} />
                     </div>
+
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label style={{ fontWeight: "bold", marginBottom: "6px" }}>Email:</label>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            style={{
-                                padding: "5px",
-                                fontSize: "16px",
-                                borderRadius: "4px",
-                                border: "1px solid #ccc",
-                                width: "500px",
-                            }}
-                        />
+                        <Email value={email} onChange={setEmail} />
                     </div>
+
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>CEP:</label>
-                        <IMaskInput
-                            mask="00000-000"
-                            value={cep}
-                            onAccept={(value) => setCep(value)}
-                            placeholder="00000-000"
-                            style={{
-                                padding: "5px",
-                                fontSize: "16px",
-                                borderRadius: "4px",
-                                border: "1px solid #ccc",
-                                width: "200px",
-                            }} />
+                        <Cep value={cep} onChange={(value) => setCep(cep)} />
                     </div>
-                </div>
 
+                </div>
 
                 <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
 
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label style={{ fontWeight: "bold", marginBottom: "6px" }}>Status:</label>
-                        <select
-                            value={situacao}
-                            onChange={(e) => setSituacao(e.target.value)}
-                            style={{
-                                padding: "5px",
-                                fontSize: "16px",
-                                borderRadius: "4px",
-                                border: "1px solid #ccc",
-                                width: "170px",
-                            }}
-                        >
-                            <option value="">Selecione...</option>
-                            {status.map((st) => (
-                                <option key={st.sigla} value={st.sigla}>
-                                    {st.nome} ({st.sigla})
-                                </option>
-                            ))}
-                        </select>
+                        <Status value={situacao} onChange={setSituacao} />
                     </div>
+
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label style={{ fontWeight: "bold", marginBottom: "6px" }}>Capacidade (m³):</label>
                         <input

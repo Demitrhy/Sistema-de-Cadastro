@@ -4,6 +4,8 @@ import { Importar } from '../../api/Api';
 import { toast } from 'react-toastify';
 import { Button, Form, Modal } from "react-bootstrap";
 import api from '../../components/Axios';
+import Status from '../../components/selectStatusProd';
+import Unidade from '../../components/selectUnidade';
 
 const CadastroIndividual: React.FC = () => {
     const [planilha, setPlanilha] = useState<Array<Produto>>([]);
@@ -44,9 +46,7 @@ const CadastroIndividual: React.FC = () => {
         setFornecedor([])
     };
 
-    const limparPlanilha = () => {
-        setPlanilha([]);
-    }
+   
 
     useEffect(() => {
         const preco = custo + (custo * percLucro / 100);
@@ -71,7 +71,7 @@ const CadastroIndividual: React.FC = () => {
         const fetchProdutos = async () => {
             setLoading(true);
             try {
-                const response = await api.get('/Fornecedor/BucarFornecedor'); // <-- sua URL
+                const response = await api.get('/Fornecedor/BucarFornecedor');
                 setFornecedor(response.data);
                 setCarregado(true);
             } catch (error) {
@@ -265,7 +265,7 @@ const CadastroIndividual: React.FC = () => {
                                 fontSize: '16px',
                                 borderRadius: '4px',
                                 border: '1px solid #ccc',
-                                width: '580px',
+                                width: '400px',
                             }}
                         />
                     </div>
@@ -318,56 +318,18 @@ const CadastroIndividual: React.FC = () => {
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Unidade Medida</label>
-                        <select
-                            value={unidade}
-                            onChange={(e) => setUnidade(e.target.value)}
 
-                            style={{
-                                padding: '5px',
-                                fontSize: '16px',
-                                borderRadius: '4px',
-                                appearance: 'textfield', // Firefox
-                                border: '1px solid #ccc',
-                                width: '250px',
-                            }}>
-                            <option value="">Selecione...</option>
-                            <option value="UN"> Unidade</option>
-                            <option value="CX"> Caixa    </option>
-                            <option value="FR"> Frasco    </option>
-                            <option value="BL"> Blister    </option>
-                            <option value="MG"> Miligrama   </option>
-                            <option value="ML">Mililitro  </option>
-                            <option value="G">  Grama   </option>
-                            <option value="KG">Quilograma   </option>
-                            <option value="PAC"> Pacote   </option>
-                            <option value="AMP"> Ampola   </option>
-                        </select>
+                        <Unidade value={unidade} onChange={setUnidade} />
 
                     </div>
                 </div>
 
                 <div style={{ display: 'flex', gap: '30px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Status</label>
-                        <select
-                            value={situacao}
-                            onChange={(e) => setSituacao(e.target.value)}
-                            style={{
-                                padding: '5px',
-                                fontSize: '16px',
-                                borderRadius: '4px',
-                                appearance: 'textfield', // Firefox
-                                border: '1px solid #ccc',
-                                width: '170px',
-                            }}>
-                            <option value="">Selecione...</option>
-                            <option value="A">Ativo</option>
-                            <option value="S">Suspenso </option>
-                            <option value="D">Desativado</option>
-                        </select>
 
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <Status value={situacao} onChange={setSituacao} />
                     </div>
+
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <label style={{ fontWeight: 'bold', marginBottom: '6px' }}>Custo</label>
                         <input
@@ -381,7 +343,7 @@ const CadastroIndividual: React.FC = () => {
                                 borderRadius: '4px',
                                 appearance: 'textfield', // Firefox
                                 border: '1px solid #ccc',
-                                width: '200px',
+                                 width: '180px',
                             }}
                         />
                     </div>
@@ -398,7 +360,7 @@ const CadastroIndividual: React.FC = () => {
                                 borderRadius: '4px',
                                 appearance: 'textfield', // Firefox
                                 border: '1px solid #ccc',
-                                width: '200px',
+                                width: '180px',
                             }}
                         />
                     </div>
@@ -415,7 +377,7 @@ const CadastroIndividual: React.FC = () => {
                                 borderRadius: '4px',
                                 appearance: 'textfield', // Firefox
                                 border: '1px solid #ccc',
-                                width: '200px',
+                                   width: '180px',
                             }}
                         />
                     </div>
@@ -433,7 +395,7 @@ const CadastroIndividual: React.FC = () => {
                                 borderRadius: '4px',
                                 appearance: 'textfield', // Firefox
                                 border: '1px solid #ccc',
-                                width: '200px',
+                                width: '150px',
                             }}
                         />
                     </div>
@@ -451,7 +413,7 @@ const CadastroIndividual: React.FC = () => {
                                 borderRadius: '4px',
                                 appearance: 'textfield', // Firefox
                                 border: '1px solid #ccc',
-                                width: '200px',
+                                 width: '180px',
                             }}
                         />
                     </div>
@@ -514,7 +476,7 @@ const CadastroIndividual: React.FC = () => {
                             borderRadius: '15px',
                             color: 'white',
                             fontWeight: 'bold',
-                            marginTop:'25px'
+                            marginTop: '25px'
                         }}
                     >
                         ▶ Importar

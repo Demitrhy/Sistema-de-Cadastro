@@ -35,6 +35,8 @@ public class Program
         builder.Services.AddScoped<IFornecedorRepositorio, FornecedorRepositorio>();
         builder.Services.AddScoped<IProdutoDepositoService, ProdutoDepositoService>();
         builder.Services.AddScoped<IProdutoDepositoRepositorio, ProdutoDepositoRepositorio>();
+        builder.Services.AddScoped<IFilialService, FilialService>();
+        builder.Services.AddScoped<IFilialRepository, FilialRepository>();
         builder.Services.AddScoped<ICodigoService, CodigoService>();
         builder.Services.AddScoped<IDepositoService, DepositoService>();
         builder.Services.AddScoped<IDepositoRepositorio, DepositoRepositorio>();
