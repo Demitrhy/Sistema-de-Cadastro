@@ -46,9 +46,7 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        
-        var validar = Guid.NewGuid();
-        
+
 
         // CORS
         builder.Services.AddCors(options => {
