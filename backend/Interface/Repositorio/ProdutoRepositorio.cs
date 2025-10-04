@@ -75,9 +75,7 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio
 
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("CodigoProduto", produto.Produto);
-                parameters.Add("Descricao", produto.Nome);
-                parameters.Add("IdTipo", produto.Id_Tipo);
-                parameters.Add("IdUnidade", produto.Id_Unidade);
+                parameters.Add("PM_CD_DIGITO", produto.Digito);
 
                 int buscar = connection.QueryFirstOrDefault<int>(ProdutoScript.VerificarProdutoExistente, parameters);
 
@@ -87,23 +85,7 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio
 
             }
         }
-        public int VerificarSeExisteCodigo(int produto)
-        {
-            using (var connection = new SqlConnection(_sqlConnection.ConnectionString))
-            {
-                connection.Open();
-
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("CodigoProduto", produto);
-
-                int buscar = connection.QueryFirstOrDefault<int>(ProdutoScript.VerificarProdutoExistente, parameters);
-
-                connection.Close();
-
-                return buscar;
-
-            }
-        }
+      
         public async Task<int> BuscarMaiorCodigo()
         {
             using (var conexao = new SqlConnection(_sqlConnection.ConnectionString))
@@ -180,35 +162,33 @@ namespace LOG_RT_DISTRIBUICAO_CORE.Interface.Repositorio
             }
         }
 
-        public async Task InserirProdutoNovo(List<ProdutoDto> produto, int produtoAleatorio , int digito, int tipo, int grupo, int unidade)
+        public async Task InserirProdutoNovo(ProdutoDto produto, int produtoAleatorio , int digito, int tipo, int grupo, int unidade)
         {
 
             using (var connection = new SqlConnection(_sqlConnection.ConnectionString))
             {
                 connection.Open();
-
-                foreach (var item in produto)
-                {
+              
                     DynamicParameters parameters = new DynamicParameters();
-                    parameters.Add("PM_CD_PRODUTO", item.codigoBloqueado  == false ? item.Produto : produtoAleatorio );
+                    parameters.Add("PM_CD_PRODUTO", produto.codigoBloqueado  == false ? produto.Produto : produtoAleatorio);
                     parameters.Add("PM_CD_DIGITO", digito);
-                    parameters.Add("PM_TX_DESCRICAO", item.Nome);
-                    parameters.Add("PM_TX_MARCA", item.Marca);
-                    parameters.Add("PM_ST_SITUACAO", item.Situacao);
-                    parameters.Add("UNIDADE_MEDIDA", item.UnidadeMedida);
-                    parameters.Add("PM_RS_CUSTO", item.Custo);
-                    parameters.Add("PM_RS_PERC_LUCRO", item.PercLucro);
-                    parameters.Add("PM_RS_PRECO_VENDA", item.PrecoVenda);
-                    parameters.Add("PM_RS_COMISSAO", item.Comissao);
-                    parameters.Add("PM_RS_LIQUIDO", item.Liquido);
+                    parameters.Add("PM_TX_DESCRICAO", produto.Nome);
+                    parameters.Add("PM_TX_MARCA", produto.Marca);
+                    parameters.Add("PM_ST_SITUACAO", produto.Situacao);
+                    parameters.Add("UNIDADE_MEDIDA", produto.UnidadeMedida);
+                    parameters.Add("PM_RS_CUSTO", produto.Custo);
+                    parameters.Add("PM_RS_PERC_LUCRO", produto.PercLucro);
+                    parameters.Add("PM_RS_PRECO_VENDA", produto.PrecoVenda);
+                    parameters.Add("PM_RS_COMISSAO", produto.Comissao);
+                    parameters.Add("PM_RS_LIQUIDO", produto.Liquido);
                     parameters.Add("ID_TIPO", tipo);
                     parameters.Add("ID_GRUPO", grupo);
                     parameters.Add("ID_UNIDADE_MEDIDA", unidade);
-                    parameters.Add("FORNECEDOR", item.Fornecedor);
+                    parameters.Add("FORNECEDOR", produto.Fornecedor);
 
 
                     await connection.ExecuteAsync(ProdutoScript.InserirNovoProduto, parameters);
-                }
+                
                 connection.Close();
             }
         }

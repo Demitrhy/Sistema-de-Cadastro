@@ -87,6 +87,7 @@
            FROM PRODUTO_MESTRE
            WHERE 
                PM_CD_PRODUTO = @CodigoProduto
+               PM_CD_DIGITO = @PM_CD_DIGITO
                
 
           ";
